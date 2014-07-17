@@ -1,0 +1,10 @@
+name: malison
+version: 0.0.1
+author: Bob Nystrom <robert@stuffwithstuff.com>
+description: A little terminal emulation package.
+homepage: http://journal.stuffwithstuff.com/
+dependencies:
+  piecemeal:
+    path: ../piecemeal
+dev_dependencies:
+  unittest: any
