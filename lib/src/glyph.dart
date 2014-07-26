@@ -55,13 +55,16 @@ class Glyph {
   final Color  fore;
   final Color  back;
 
-  Glyph(String char, [this.fore = Color.WHITE, this.back = Color.BLACK])
-      : char = char.codeUnits[0];
+  Glyph(String char, [Color fore, Color back])
+      : char = char.codeUnits[0],
+        fore = fore != null ? fore : Color.WHITE,
+        back = back != null ? back : Color.BLACK;
 
-  Glyph.fromCharCode(this.char, [this.fore = Color.WHITE, this.back = Color.BLACK]);
+  Glyph.fromCharCode(this.char, [Color fore, Color back])
+      : fore = fore != null ? fore : Color.WHITE,
+        back = back != null ? back : Color.BLACK;
 
-  factory Glyph.fromDynamic(charOrCharCode,
-      [Color fore = Color.WHITE, Color back = Color.BLACK]) {
+  factory Glyph.fromDynamic(charOrCharCode, [Color fore, Color back]) {
     if (charOrCharCode is String) return new Glyph(charOrCharCode, fore, back);
     return new Glyph.fromCharCode(charOrCharCode, fore, back);
   }
@@ -81,7 +84,8 @@ class Glyph {
 // Note: If you add stuff to this, make sure to add an appropriate mapping in
 // canvas_terminal.dart.
 class CharCode {
-  static const SPACE = 32;
+  static const SPACE = 0x0020;
+  static const ASTERISK = 0x002a;
   static const BULLET = 0x2022;
   static const LEFT_RIGHT_ARROW = 0x2194;
   static const UP_DOWN_ARROW = 0x2195;
