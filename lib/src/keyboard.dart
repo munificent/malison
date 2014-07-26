@@ -28,7 +28,7 @@ class Keyboard {
 
   int get lastPressed => _lastPressed;
 
-  void keyDown(event) {
+  void keyDown(html.KeyEvent event) {
     if (event.keyCode == KeyCode.SHIFT) {
       _shift = true;
     } else if (event.keyCode == KeyCode.CONTROL) {
@@ -41,12 +41,16 @@ class Keyboard {
 
     // Don't let the browser handle the tab or backspace key.
     if (event.keyCode == KeyCode.TAB ||
-        event.keyCode == KeyCode.DELETE) {
+        event.keyCode == KeyCode.DELETE ||
+        event.keyCode == KeyCode.UP ||
+        event.keyCode == KeyCode.DOWN ||
+        event.keyCode == KeyCode.LEFT ||
+        event.keyCode == KeyCode.RIGHT) {
       event.preventDefault();
     }
   }
 
-  void keyUp(event) {
+  void keyUp(html.KeyEvent event) {
     if (event.keyCode == KeyCode.SHIFT) {
       _shift = false;
     } else if (event.keyCode == KeyCode.CONTROL) {
