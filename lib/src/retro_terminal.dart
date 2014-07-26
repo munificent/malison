@@ -13,17 +13,18 @@ import 'terminal.dart';
 /// [font]: http://en.wikipedia.org/wiki/Code_page_437
 class RetroTerminal implements RenderableTerminal {
   /// The current display state. The glyphs here mirror what has been rendered.
-  final Array2D<Glyph> glyphs;
+  final Array2D<Glyph> _glyphs;
 
   /// The glyphs that have been modified since the last call to [render].
-  final Array2D<Glyph> changedGlyphs;
+  final Array2D<Glyph> _changedGlyphs;
 
-  final html.CanvasElement canvas;
-  html.CanvasRenderingContext2D context;
-  html.ImageElement font;
+  final html.CanvasElement _canvas;
+  html.CanvasRenderingContext2D _context;
+  html.ImageElement _font;
 
-  int get width => glyphs.width;
-  int get height => glyphs.height;
+  int get width => _glyphs.width;
+  int get height => _glyphs.height;
+  Vec get size => _glyphs.size;
 
   /// A cache of the tinted font images. Each key is a CSS class name, and the
   /// image will be the font in that color.
@@ -34,37 +35,48 @@ class RetroTerminal implements RenderableTerminal {
 
   bool _imageLoaded = false;
 
-  final int _fontWidth;
-  final int _fontHeight;
+  final int _charWidth;
+  final int _charHeight;
 
-  static final clearGlyph = new Glyph(' ');
+  static final _clearGlyph = new Glyph(' ');
 
-  // TODO(bob): Make this const when we can use const expressions as keys in
+  // TODO: Make this const when we can use const expressions as keys in
   // map literals.
-  static final unicodeMap = _createUnicodeMap();
+  static final _unicodeMap = _createUnicodeMap();
 
-  RetroTerminal(int width, int height, this.canvas, String image,
-      {int w, int h})
-      : glyphs = new Array2D<Glyph>(width, height, () => null),
-        changedGlyphs = new Array2D<Glyph>(width, height,() => clearGlyph),
-        _fontWidth = w,
-        _fontHeight = h {
-    context = canvas.context2D;
+  /// Creates a new terminal using a built-in DOS-like font.
+  RetroTerminal.dos(int width, int height, html.CanvasElement canvas)
+      : this(width, height, canvas, "packages/malison/dos.png",
+            charWidth: 9, charHeight: 16);
+
+  /// Creates a new terminal using a short built-in DOS-like font.
+  RetroTerminal.shortDos(int width, int height, html.CanvasElement canvas)
+      : this(width, height, canvas, "packages/malison/dos-short.png",
+            charWidth: 9, charHeight: 13);
+
+  /// Creates a new terminal using a font image at [imageUrl].
+  RetroTerminal(int width, int height, this._canvas, String imageUrl,
+      {int charWidth, int charHeight})
+      : _glyphs = new Array2D<Glyph>(width, height, () => null),
+        _changedGlyphs = new Array2D<Glyph>(width, height,() => _clearGlyph),
+        _charWidth = charWidth,
+        _charHeight = charHeight {
+    _context = _canvas.context2D;
 
     // Handle high-resolution (i.e. retina) displays.
     if (html.window.devicePixelRatio > 1) {
       _scale = 2;
     }
 
-    var canvasWidth = _fontWidth * width;
-    var canvasHeight = _fontHeight * height;
-    canvas.width = canvasWidth * _scale;
-    canvas.height = canvasHeight * _scale;
-    canvas.style.width = '${canvasWidth}px';
-    canvas.style.height = '${canvasHeight}px';
+    var canvasWidth = _charWidth * width;
+    var canvasHeight = _charHeight * height;
+    _canvas.width = canvasWidth * _scale;
+    _canvas.height = canvasHeight * _scale;
+    _canvas.style.width = '${canvasWidth}px';
+    _canvas.style.height = '${canvasHeight}px';
 
-    font = new html.ImageElement(src: image);
-    font.onLoad.listen((_) {
+    _font = new html.ImageElement(src: imageUrl);
+    _font.onLoad.listen((_) {
       _imageLoaded = true;
       render();
     });
@@ -90,7 +102,7 @@ class RetroTerminal implements RenderableTerminal {
   void clear() {
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
-        drawGlyph(x, y, clearGlyph);
+        drawGlyph(x, y, _clearGlyph);
       }
     }
   }
@@ -105,25 +117,30 @@ class RetroTerminal implements RenderableTerminal {
   void writeAt(int x, int y, String text, [Color fore, Color back]) {
     if (fore == null) fore = Color.WHITE;
     if (back == null) back = Color.BLACK;
-    // TODO(bob): Bounds check.
+    // TODO: Bounds check.
     for (int i = 0; i < text.length; i++) {
       if (x + i >= width) break;
-      // TODO(bob): Is codeUnits[] the right thing here? Is it fast?
+      // TODO: Is codeUnits[] the right thing here? Is it fast?
       drawGlyph(x + i, y, new Glyph.fromCharCode(text.codeUnits[i], fore, back));
     }
   }
 
   void drawGlyph(int x, int y, Glyph glyph) {
-    if (glyphs.get(x, y) != glyph) {
-      changedGlyphs.set(x, y, glyph);
+    if (x < 0) return;
+    if (x >= width) return;
+    if (y < 0) return;
+    if (y >= height) return;
+
+    if (_glyphs.get(x, y) != glyph) {
+      _changedGlyphs.set(x, y, glyph);
     } else {
-      changedGlyphs.set(x, y, null);
+      _changedGlyphs.set(x, y, null);
     }
   }
 
   Terminal rect(int x, int y, int width, int height) {
-    // TODO(bob): Bounds check.
-    return new PortTerminal(x, y, width, height, this);
+    // TODO: Bounds check.
+    return new PortTerminal(x, y, new Vec(width, height), this);
   }
 
   void render() {
@@ -131,31 +148,31 @@ class RetroTerminal implements RenderableTerminal {
 
     for (int y = 0; y < height; y++) {
       for (int x = 0; x < width; x++) {
-        var glyph = changedGlyphs.get(x, y);
+        var glyph = _changedGlyphs.get(x, y);
 
         // Only draw glyphs that are different since the last call.
         if (glyph == null) continue;
 
         // Up to date now.
-        glyphs.set(x, y, glyph);
-        changedGlyphs.set(x, y, null);
+        _glyphs.set(x, y, glyph);
+        _changedGlyphs.set(x, y, null);
 
         var char = glyph.char;
 
         // See if it's a Unicode character that needs to be remapped.
-        var fromUnicode = unicodeMap[char];
+        var fromUnicode = _unicodeMap[char];
         if (fromUnicode != null) char = fromUnicode;
 
-        var sx = (char % 32) * _fontWidth;
-        var sy = (char ~/ 32) * _fontHeight;
+        var sx = (char % 32) * _charWidth;
+        var sy = (char ~/ 32) * _charHeight;
 
         // Fill the background.
-        context.fillStyle = glyph.back.cssColor;
-        context.fillRect(
-            x * _fontWidth * _scale,
-            y * _fontHeight * _scale,
-            _fontWidth * _scale,
-            _fontHeight * _scale);
+        _context.fillStyle = glyph.back.cssColor;
+        _context.fillRect(
+            x * _charWidth * _scale,
+            y * _charHeight * _scale,
+            _charWidth * _scale,
+            _charHeight * _scale);
 
         // Don't bother drawing empty characters.
         if (char == 0 || char == CharCode.SPACE) continue;
@@ -163,34 +180,34 @@ class RetroTerminal implements RenderableTerminal {
         var color = _getColorFont(glyph.fore);
         // *2 because the font image is double-sized. That ensures it stays
         // sharp on retina displays and doesn't render scaled up.
-        context.drawImageScaledFromSource(color,
-            sx * 2, sy * 2, _fontWidth * 2, _fontHeight * 2,
-            x * _fontWidth * _scale,
-            y * _fontHeight * _scale,
-            _fontWidth * _scale,
-            _fontHeight * _scale);
+        _context.drawImageScaledFromSource(color,
+            sx * 2, sy * 2, _charWidth * 2, _charHeight * 2,
+            x * _charWidth * _scale,
+            y * _charHeight * _scale,
+            _charWidth * _scale,
+            _charHeight * _scale);
       }
     }
   }
 
   Vec pixelToChar(Vec pixel) =>
-      new Vec(pixel.x ~/ _fontWidth, pixel.y ~/ _fontHeight);
+      new Vec(pixel.x ~/ _charWidth, pixel.y ~/ _charHeight);
 
   html.CanvasElement _getColorFont(Color color) {
     var cached = _fontColorCache[color.cssClass];
     if (cached != null) return cached;
 
     // Create a font using the given color.
-    var tint = new html.CanvasElement(width: font.width, height: font.height);
+    var tint = new html.CanvasElement(width: _font.width, height: _font.height);
     var context = tint.context2D;
 
     // Draw the font.
-    context.drawImage(font, 0, 0);
+    context.drawImage(_font, 0, 0);
 
     // Tint it by filling in the existing alpha with the color.
     context.globalCompositeOperation = 'source-atop';
     context.fillStyle = color.cssColor;
-    context.fillRect(0, 0, font.width, font.height);
+    context.fillRect(0, 0, _font.width, _font.height);
 
     _fontColorCache[color.cssClass] = tint;
     return tint;
