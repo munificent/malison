@@ -21,6 +21,7 @@ class CanvasTerminal implements RenderableTerminal {
 
   int scale = 1;
 
+  Vec get size => glyphs.size;
   int get width => glyphs.width;
   int get height => glyphs.height;
 
@@ -77,8 +78,8 @@ class CanvasTerminal implements RenderableTerminal {
   }
 
   Terminal rect(int x, int y, int width, int height) {
-    // TODO(bob): Bounds check.
-    return new PortTerminal(x, y, width, height, this);
+    // TODO: Bounds check.
+    return new PortTerminal(x, y, new Vec(width, height), this);
   }
 
   void render() {

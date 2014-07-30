@@ -52,7 +52,7 @@ class DomTerminal implements RenderableTerminal {
 
   Terminal rect(int x, int y, int width, int height) {
     // TODO(bob): Bounds check.
-    return new PortTerminal(x, y, width, height, this);
+    return new PortTerminal(x, y, new Vec(width, height), this);
   }
 
   void render() {
