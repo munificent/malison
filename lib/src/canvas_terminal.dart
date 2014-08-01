@@ -8,7 +8,7 @@ import 'glyph.dart';
 import 'terminal.dart';
 
 /// Draws to a canvas using a browser font.
-class CanvasTerminal implements RenderableTerminal {
+class CanvasTerminal extends RenderableTerminal {
   /// The current display state. The glyphs here mirror what has been rendered.
   final Array2D<Glyph> glyphs;
 
@@ -25,11 +25,9 @@ class CanvasTerminal implements RenderableTerminal {
   int get width => glyphs.width;
   int get height => glyphs.height;
 
-  static final clearGlyph = new Glyph(' ');
-
   CanvasTerminal(int width, int height, this.canvas, this.font)
-      : glyphs = new Array2D<Glyph>(width, height, () => null),
-        changedGlyphs = new Array2D<Glyph>(width, height,() => clearGlyph) {
+      : glyphs = new Array2D<Glyph>(width, height),
+        changedGlyphs = new Array2D<Glyph>(width, height, Glyph.CLEAR) {
     context = canvas.context2D;
 
     canvas.width = font.charWidth * width;
@@ -41,31 +39,6 @@ class CanvasTerminal implements RenderableTerminal {
 
       canvas.style.width = '${font.charWidth * width / scale}px';
       canvas.style.height = '${font.lineHeight * height / scale}px';
-    }
-  }
-
-  void clear() {
-    for (var y = 0; y < height; y++) {
-      for (var x = 0; x < width; x++) {
-        drawGlyph(x, y, clearGlyph);
-      }
-    }
-  }
-
-  void write(String text, [Color fore, Color back]) {
-    for (int x = 0; x < text.length; x++) {
-      if (x >= width) break;
-      writeAt(x, 0, text[x], fore, back);
-    }
-  }
-
-  void writeAt(int x, int y, String text, [Color fore, Color back]) {
-    if (fore == null) fore = Color.WHITE;
-    if (back == null) back = Color.BLACK;
-    // TODO(bob): Bounds check.
-    for (int i = 0; i < text.length; i++) {
-      if (x + i >= width) break;
-      drawGlyph(x + i, y, new Glyph.fromCharCode(text.codeUnits[i], fore, back));
     }
   }
 

@@ -11,7 +11,7 @@ import 'terminal.dart';
 /// got some basic optimization to minimize the amount of drawing it has to do.
 ///
 /// [font]: http://en.wikipedia.org/wiki/Code_page_437
-class RetroTerminal implements RenderableTerminal {
+class RetroTerminal extends RenderableTerminal {
   /// The current display state. The glyphs here mirror what has been rendered.
   final Array2D<Glyph> _glyphs;
 
@@ -26,9 +26,9 @@ class RetroTerminal implements RenderableTerminal {
   int get height => _glyphs.height;
   Vec get size => _glyphs.size;
 
-  /// A cache of the tinted font images. Each key is a CSS class name, and the
-  /// image will be the font in that color.
-  final Map<String, html.CanvasElement> _fontColorCache = {};
+  /// A cache of the tinted font images. Each key is a color, and the image
+  /// will is the font in that color.
+  final Map<Color, html.CanvasElement> _fontColorCache = {};
 
   /// The drawing scale, used to adapt to Retina displays.
   int _scale = 1;
@@ -37,8 +37,6 @@ class RetroTerminal implements RenderableTerminal {
 
   final int _charWidth;
   final int _charHeight;
-
-  static final _clearGlyph = new Glyph(' ');
 
   // TODO: Make this const when we can use const expressions as keys in
   // map literals.
@@ -57,8 +55,8 @@ class RetroTerminal implements RenderableTerminal {
   /// Creates a new terminal using a font image at [imageUrl].
   RetroTerminal(int width, int height, this._canvas, String imageUrl,
       {int charWidth, int charHeight})
-      : _glyphs = new Array2D<Glyph>(width, height, () => null),
-        _changedGlyphs = new Array2D<Glyph>(width, height,() => _clearGlyph),
+      : _glyphs = new Array2D<Glyph>(width, height),
+        _changedGlyphs = new Array2D<Glyph>(width, height, Glyph.CLEAR),
         _charWidth = charWidth,
         _charHeight = charHeight {
     _context = _canvas.context2D;
@@ -97,32 +95,6 @@ class RetroTerminal implements RenderableTerminal {
     map[CharCode.PI] = 227;
     map[CharCode.BLACK_HEART_SUIT] = 3;
     return map;
-  }
-
-  void clear() {
-    for (var y = 0; y < height; y++) {
-      for (var x = 0; x < width; x++) {
-        drawGlyph(x, y, _clearGlyph);
-      }
-    }
-  }
-
-  void write(String text, [Color fore, Color back]) {
-    for (int x = 0; x < text.length; x++) {
-      if (x >= width) break;
-      writeAt(x, 0, text[x], fore, back);
-    }
-  }
-
-  void writeAt(int x, int y, String text, [Color fore, Color back]) {
-    if (fore == null) fore = Color.WHITE;
-    if (back == null) back = Color.BLACK;
-    // TODO: Bounds check.
-    for (int i = 0; i < text.length; i++) {
-      if (x + i >= width) break;
-      // TODO: Is codeUnits[] the right thing here? Is it fast?
-      drawGlyph(x + i, y, new Glyph.fromCharCode(text.codeUnits[i], fore, back));
-    }
   }
 
   void drawGlyph(int x, int y, Glyph glyph) {
@@ -194,7 +166,7 @@ class RetroTerminal implements RenderableTerminal {
       new Vec(pixel.x ~/ _charWidth, pixel.y ~/ _charHeight);
 
   html.CanvasElement _getColorFont(Color color) {
-    var cached = _fontColorCache[color.cssClass];
+    var cached = _fontColorCache[color];
     if (cached != null) return cached;
 
     // Create a font using the given color.
@@ -209,7 +181,7 @@ class RetroTerminal implements RenderableTerminal {
     context.fillStyle = color.cssColor;
     context.fillRect(0, 0, _font.width, _font.height);
 
-    _fontColorCache[color.cssClass] = tint;
+    _fontColorCache[color] = tint;
     return tint;
   }
 }
