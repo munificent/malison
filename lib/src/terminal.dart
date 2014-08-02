@@ -3,6 +3,7 @@ library malison.terminal;
 import 'package:piecemeal/piecemeal.dart';
 
 import 'glyph.dart';
+import 'port_terminal.dart';
 
 abstract class Terminal {
   int get width;
@@ -36,8 +37,12 @@ abstract class Terminal {
     }
   }
 
+  Terminal rect(int x, int y, int width, int height) {
+    // TODO: Bounds check.
+    return new PortTerminal(x, y, new Vec(width, height), this);
+  }
+
   void drawGlyph(int x, int y, Glyph glyph);
-  Terminal rect(int x, int y, int width, int height);
 }
 
 abstract class RenderableTerminal extends Terminal {
@@ -46,40 +51,4 @@ abstract class RenderableTerminal extends Terminal {
   /// Given a point in pixel coordinates, returns the coordinates of the
   /// character that contains that pixel.
   Vec pixelToChar(Vec pixel);
-}
-
-class PortTerminal extends Terminal {
-  int get width => size.x;
-  int get height => size.y;
-  final Vec size;
-
-  final int _x;
-  final int _y;
-  final Terminal _root;
-
-  PortTerminal(this._x, this._y, this.size, this._root);
-
-  void write(String text, [Color fore, Color back]) {
-    // TODO: Bounds test this.
-    _root.writeAt(_x, _y, text, fore, back);
-  }
-
-  void writeAt(int x, int y, String text, [Color fore, Color back]) {
-    // TODO: Bounds test this.
-    _root.writeAt(_x + x, _y + y, text, fore, back);
-  }
-
-  void drawGlyph(int x, int y, Glyph glyph) {
-    if (x < 0) return;
-    if (x >= width) return;
-    if (y < 0) return;
-    if (y >= height) return;
-
-    _root.drawGlyph(_x + x, _y + y, glyph);
-  }
-
-  Terminal rect(int x, int y, int width, int height) {
-    // TODO: Bounds check.
-    return new PortTerminal(_x + x, _y + y, new Vec(width, height), _root);
-  }
 }

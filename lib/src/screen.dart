@@ -60,14 +60,14 @@ class UserInterface {
   }
 
   void pop([result]) {
-    final screen = _screens.removeLast();
+    var screen = _screens.removeLast();
     screen._unbind();
     _screens[_screens.length - 1].activate(screen, result);
     _render();
   }
 
   void goTo(Screen screen) {
-    final old = _screens.removeLast();
+    var old = _screens.removeLast();
     old._unbind();
 
     screen._bind(this);
@@ -86,7 +86,7 @@ class UserInterface {
       if (_screens[i].handleInput(_keyboard)) break;
     }
 
-    for (final screen in _screens) screen.update();
+    for (var screen in _screens) screen.update();
 
     _keyboard.afterUpdate();
 
@@ -94,7 +94,7 @@ class UserInterface {
   }
 
   void _render() {
-    for (final screen in _screens) screen.render(_terminal);
+    for (var screen in _screens) screen.render(_terminal);
 
     _dirty = false;
     _terminal.render();

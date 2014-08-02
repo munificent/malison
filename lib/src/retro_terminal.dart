@@ -5,26 +5,23 @@ import 'dart:html' as html;
 import 'package:piecemeal/piecemeal.dart';
 
 import 'glyph.dart';
+import 'display.dart';
 import 'terminal.dart';
 
-/// Draws to a canvas using the old school DOS [code page 437][font] font. It's
-/// got some basic optimization to minimize the amount of drawing it has to do.
+/// A [RenderableTerminal] that draws to a canvas using the old school DOS
+/// [code page 437][font] font.
 ///
 /// [font]: http://en.wikipedia.org/wiki/Code_page_437
 class RetroTerminal extends RenderableTerminal {
-  /// The current display state. The glyphs here mirror what has been rendered.
-  final Array2D<Glyph> _glyphs;
-
-  /// The glyphs that have been modified since the last call to [render].
-  final Array2D<Glyph> _changedGlyphs;
+  final Display _display;
 
   final html.CanvasElement _canvas;
   html.CanvasRenderingContext2D _context;
   html.ImageElement _font;
 
-  int get width => _glyphs.width;
-  int get height => _glyphs.height;
-  Vec get size => _glyphs.size;
+  int get width => _display.width;
+  int get height => _display.height;
+  Vec get size => _display.size;
 
   /// A cache of the tinted font images. Each key is a color, and the image
   /// will is the font in that color.
@@ -55,8 +52,7 @@ class RetroTerminal extends RenderableTerminal {
   /// Creates a new terminal using a font image at [imageUrl].
   RetroTerminal(int width, int height, this._canvas, String imageUrl,
       {int charWidth, int charHeight})
-      : _glyphs = new Array2D<Glyph>(width, height),
-        _changedGlyphs = new Array2D<Glyph>(width, height, Glyph.CLEAR),
+      : _display = new Display(width, height),
         _charWidth = charWidth,
         _charHeight = charHeight {
     _context = _canvas.context2D;
@@ -98,68 +94,43 @@ class RetroTerminal extends RenderableTerminal {
   }
 
   void drawGlyph(int x, int y, Glyph glyph) {
-    if (x < 0) return;
-    if (x >= width) return;
-    if (y < 0) return;
-    if (y >= height) return;
-
-    if (_glyphs.get(x, y) != glyph) {
-      _changedGlyphs.set(x, y, glyph);
-    } else {
-      _changedGlyphs.set(x, y, null);
-    }
-  }
-
-  Terminal rect(int x, int y, int width, int height) {
-    // TODO: Bounds check.
-    return new PortTerminal(x, y, new Vec(width, height), this);
+    _display.setGlyph(x, y, glyph);
   }
 
   void render() {
     if (!_imageLoaded) return;
 
-    for (int y = 0; y < height; y++) {
-      for (int x = 0; x < width; x++) {
-        var glyph = _changedGlyphs.get(x, y);
+    _display.render((x, y, glyph) {
+      var char = glyph.char;
 
-        // Only draw glyphs that are different since the last call.
-        if (glyph == null) continue;
+      // See if it's a Unicode character that needs to be remapped.
+      var fromUnicode = _unicodeMap[char];
+      if (fromUnicode != null) char = fromUnicode;
 
-        // Up to date now.
-        _glyphs.set(x, y, glyph);
-        _changedGlyphs.set(x, y, null);
+      var sx = (char % 32) * _charWidth;
+      var sy = (char ~/ 32) * _charHeight;
 
-        var char = glyph.char;
+      // Fill the background.
+      _context.fillStyle = glyph.back.cssColor;
+      _context.fillRect(
+          x * _charWidth * _scale,
+          y * _charHeight * _scale,
+          _charWidth * _scale,
+          _charHeight * _scale);
 
-        // See if it's a Unicode character that needs to be remapped.
-        var fromUnicode = _unicodeMap[char];
-        if (fromUnicode != null) char = fromUnicode;
+      // Don't bother drawing empty characters.
+      if (char == 0 || char == CharCode.SPACE) return;
 
-        var sx = (char % 32) * _charWidth;
-        var sy = (char ~/ 32) * _charHeight;
-
-        // Fill the background.
-        _context.fillStyle = glyph.back.cssColor;
-        _context.fillRect(
-            x * _charWidth * _scale,
-            y * _charHeight * _scale,
-            _charWidth * _scale,
-            _charHeight * _scale);
-
-        // Don't bother drawing empty characters.
-        if (char == 0 || char == CharCode.SPACE) continue;
-
-        var color = _getColorFont(glyph.fore);
-        // *2 because the font image is double-sized. That ensures it stays
-        // sharp on retina displays and doesn't render scaled up.
-        _context.drawImageScaledFromSource(color,
-            sx * 2, sy * 2, _charWidth * 2, _charHeight * 2,
-            x * _charWidth * _scale,
-            y * _charHeight * _scale,
-            _charWidth * _scale,
-            _charHeight * _scale);
-      }
-    }
+      var color = _getColorFont(glyph.fore);
+      // *2 because the font image is double-sized. That ensures it stays
+      // sharp on retina displays and doesn't render scaled up.
+      _context.drawImageScaledFromSource(color,
+          sx * 2, sy * 2, _charWidth * 2, _charHeight * 2,
+          x * _charWidth * _scale,
+          y * _charHeight * _scale,
+          _charWidth * _scale,
+          _charHeight * _scale);
+    });
   }
 
   Vec pixelToChar(Vec pixel) =>

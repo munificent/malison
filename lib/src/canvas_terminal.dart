@@ -5,15 +5,12 @@ import 'dart:html' as html;
 import 'package:piecemeal/piecemeal.dart';
 
 import 'glyph.dart';
+import 'display.dart';
 import 'terminal.dart';
 
-/// Draws to a canvas using a browser font.
+/// A [RenderableTerminal] that draws to a canvas element using a browser font.
 class CanvasTerminal extends RenderableTerminal {
-  /// The current display state. The glyphs here mirror what has been rendered.
-  final Array2D<Glyph> glyphs;
-
-  /// The glyphs that have been modified since the last call to [render].
-  final Array2D<Glyph> changedGlyphs;
+  final Display _display;
 
   final Font font;
   final html.CanvasElement canvas;
@@ -21,13 +18,12 @@ class CanvasTerminal extends RenderableTerminal {
 
   int scale = 1;
 
-  Vec get size => glyphs.size;
-  int get width => glyphs.width;
-  int get height => glyphs.height;
+  Vec get size => _display.size;
+  int get width => _display.width;
+  int get height => _display.height;
 
   CanvasTerminal(int width, int height, this.canvas, this.font)
-      : glyphs = new Array2D<Glyph>(width, height),
-        changedGlyphs = new Array2D<Glyph>(width, height, Glyph.CLEAR) {
+      : _display = new Display(width, height) {
     context = canvas.context2D;
 
     canvas.width = font.charWidth * width;
@@ -43,47 +39,27 @@ class CanvasTerminal extends RenderableTerminal {
   }
 
   void drawGlyph(int x, int y, Glyph glyph) {
-    if (glyphs.get(x, y) != glyph) {
-      changedGlyphs.set(x, y, glyph);
-    } else {
-      changedGlyphs.set(x, y, null);
-    }
-  }
-
-  Terminal rect(int x, int y, int width, int height) {
-    // TODO: Bounds check.
-    return new PortTerminal(x, y, new Vec(width, height), this);
+    _display.setGlyph(x, y, glyph);
   }
 
   void render() {
     context.font = '${font.size * scale}px ${font.family}, monospace';
 
-    for (int y = 0; y < height; y++) {
-      for (int x = 0; x < width; x++) {
-        var glyph = changedGlyphs.get(x, y);
+    _display.render((x, y, glyph) {
+      var char = glyph.char;
 
-        // Only draw glyphs that are different since the last call.
-        if (glyph == null) continue;
+      // Fill the background.
+      context.fillStyle = glyph.back.cssColor;
+      context.fillRect(x * font.charWidth, y * font.lineHeight,
+          font.charWidth, font.lineHeight);
 
-        // Up to date now.
-        glyphs.set(x, y, glyph);
-        changedGlyphs.set(x, y, null);
+      // Don't bother drawing empty characters.
+      if (char == 0 || char == CharCode.SPACE) return;
 
-        var char = glyph.char;
-
-        // Fill the background.
-        context.fillStyle = glyph.back.cssColor;
-        context.fillRect(x * font.charWidth, y * font.lineHeight,
-            font.charWidth, font.lineHeight);
-
-        // Don't bother drawing empty characters.
-        if (char == 0 || char == CharCode.SPACE) continue;
-
-        context.fillStyle = glyph.fore.cssColor;
-        context.fillText(new String.fromCharCodes([char]),
-            x * font.charWidth + font.x, y * font.lineHeight + font.y);
-      }
-    }
+      context.fillStyle = glyph.fore.cssColor;
+      context.fillText(new String.fromCharCodes([char]),
+          x * font.charWidth + font.x, y * font.lineHeight + font.y);
+    });
   }
 
   Vec pixelToChar(Vec pixel) =>
