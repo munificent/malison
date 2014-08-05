@@ -5,3 +5,5 @@
   key bindings.
 
 * Remove (useless) `write()` method.
+
+* Handle semicolon keyCode difference between Firefox (59) and Chrome (186).

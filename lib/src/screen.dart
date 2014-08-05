@@ -108,7 +108,12 @@ class UserInterface {
   void _keyDown(html.KeyEvent event) {
     var screen = _screens.last;
 
-    var input = keyBindings.find(event.keyCode, shift: event.shiftKey,
+    var keyCode = event.keyCode;
+
+    // Firefox uses 59 for semicolon.
+    if (keyCode == 59) keyCode = KeyCode.SEMICOLON;
+
+    var input = keyBindings.find(keyCode, shift: event.shiftKey,
         alt: event.altKey);
 
     if (input != null) {
@@ -117,7 +122,7 @@ class UserInterface {
       if (screen.handleInput(input)) return;
     }
 
-    if (screen.keyDown(event.keyCode, shift: event.shiftKey,
+    if (screen.keyDown(keyCode, shift: event.shiftKey,
         alt: event.altKey)) {
       event.preventDefault();
     }
