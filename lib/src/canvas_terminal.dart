@@ -12,29 +12,29 @@ import 'terminal.dart';
 class CanvasTerminal extends RenderableTerminal {
   final Display _display;
 
-  final Font font;
-  final html.CanvasElement canvas;
-  html.CanvasRenderingContext2D context;
+  final Font _font;
+  final html.CanvasElement _canvas;
+  html.CanvasRenderingContext2D _context;
 
-  int scale = 1;
+  int _scale = 1;
 
   Vec get size => _display.size;
   int get width => _display.width;
   int get height => _display.height;
 
-  CanvasTerminal(int width, int height, this.canvas, this.font)
+  CanvasTerminal(int width, int height, this._canvas, this._font)
       : _display = new Display(width, height) {
-    context = canvas.context2D;
+    _context = _canvas.context2D;
 
-    canvas.width = font.charWidth * width;
-    canvas.height = font.lineHeight * height;
+    _canvas.width = _font.charWidth * width;
+    _canvas.height = _font.lineHeight * height;
 
     // Handle high-resolution (i.e. retina) displays.
     if (html.window.devicePixelRatio > 1) {
-      scale = 2;
+      _scale = 2;
 
-      canvas.style.width = '${font.charWidth * width / scale}px';
-      canvas.style.height = '${font.lineHeight * height / scale}px';
+      _canvas.style.width = '${_font.charWidth * width / _scale}px';
+      _canvas.style.height = '${_font.lineHeight * height / _scale}px';
     }
   }
 
@@ -43,27 +43,27 @@ class CanvasTerminal extends RenderableTerminal {
   }
 
   void render() {
-    context.font = '${font.size * scale}px ${font.family}, monospace';
+    _context.font = '${_font.size * _scale}px ${_font.family}, monospace';
 
     _display.render((x, y, glyph) {
       var char = glyph.char;
 
       // Fill the background.
-      context.fillStyle = glyph.back.cssColor;
-      context.fillRect(x * font.charWidth, y * font.lineHeight,
-          font.charWidth, font.lineHeight);
+      _context.fillStyle = glyph.back.cssColor;
+      _context.fillRect(x * _font.charWidth, y * _font.lineHeight,
+          _font.charWidth, _font.lineHeight);
 
       // Don't bother drawing empty characters.
       if (char == 0 || char == CharCode.SPACE) return;
 
-      context.fillStyle = glyph.fore.cssColor;
-      context.fillText(new String.fromCharCodes([char]),
-          x * font.charWidth + font.x, y * font.lineHeight + font.y);
+      _context.fillStyle = glyph.fore.cssColor;
+      _context.fillText(new String.fromCharCodes([char]),
+          x * _font.charWidth + _font.x, y * _font.lineHeight + _font.y);
     });
   }
 
   Vec pixelToChar(Vec pixel) =>
-      new Vec(pixel.x ~/ font.charWidth, pixel.y ~/ font.lineHeight);
+      new Vec(pixel.x ~/ _font.charWidth, pixel.y ~/ _font.lineHeight);
 }
 
 /// Describes a font used by [CanvasTerminal].

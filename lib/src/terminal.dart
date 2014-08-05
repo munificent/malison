@@ -5,11 +5,18 @@ import 'package:piecemeal/piecemeal.dart';
 import 'glyph.dart';
 import 'port_terminal.dart';
 
+/// A virtual console terminal that can be written onto.
 abstract class Terminal {
+  /// The number of columns of characters.
   int get width;
+
+  /// The number of rows of characters.
   int get height;
+
+  /// The number of columns and rows.
   Vec get size;
 
+  /// Clears the terminal to black.
   void clear() {
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
@@ -18,13 +25,8 @@ abstract class Terminal {
     }
   }
 
-  void write(String text, [Color fore, Color back]) {
-    for (int x = 0; x < text.length; x++) {
-      if (x >= width) break;
-      writeAt(x, 0, text[x], fore, back);
-    }
-  }
-
+  /// Writes [text] starting at column [x], row [y] using [fore] as the text
+  /// color and [back] as the background color.
   void writeAt(int x, int y, String text, [Color fore, Color back]) {
     if (fore == null) fore = Color.WHITE;
     if (back == null) back = Color.BLACK;

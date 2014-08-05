@@ -35,9 +35,22 @@ class RetroTerminal extends RenderableTerminal {
   final int _charWidth;
   final int _charHeight;
 
-  // TODO: Make this const when we can use const expressions as keys in
-  // map literals.
-  static final _unicodeMap = _createUnicodeMap();
+  static final _UNICODE_MAP = const {
+    CharCode.BULLET: 7,
+    CharCode.BULLET_OPERATOR: 249,
+    CharCode.MIDDLE_DOT: 250,
+    CharCode.UP_DOWN_ARROW: 18,
+    CharCode.LEFT_RIGHT_ARROW: 29,
+    CharCode.BLACK_UP_POINTING_TRIANGLE: 30,
+    CharCode.BLACK_SPADE_SUIT: 6,
+    CharCode.BLACK_CLUB_SUIT: 5,
+    CharCode.SOLID: 219,
+    CharCode.HALF_LEFT: 221,
+    CharCode.BOX_DRAWINGS_LIGHT_VERTICAL: 179,
+    CharCode.TRIPLE_BAR: 240,
+    CharCode.PI: 227,
+    CharCode.BLACK_HEART_SUIT: 3
+  };
 
   /// Creates a new terminal using a built-in DOS-like font.
   RetroTerminal.dos(int width, int height, html.CanvasElement canvas)
@@ -76,25 +89,6 @@ class RetroTerminal extends RenderableTerminal {
     });
   }
 
-  static Map<int, int> _createUnicodeMap() {
-    var map = new Map<int, int>();
-    map[CharCode.BULLET] = 7;
-    map[CharCode.BULLET_OPERATOR] = 249;
-    map[CharCode.MIDDLE_DOT] = 250;
-    map[CharCode.UP_DOWN_ARROW] = 18;
-    map[CharCode.LEFT_RIGHT_ARROW] = 29;
-    map[CharCode.BLACK_UP_POINTING_TRIANGLE] = 30;
-    map[CharCode.BLACK_SPADE_SUIT] = 6;
-    map[CharCode.BLACK_CLUB_SUIT] = 5;
-    map[CharCode.SOLID] = 219;
-    map[CharCode.HALF_LEFT] = 221;
-    map[CharCode.BOX_DRAWINGS_LIGHT_VERTICAL] = 179;
-    map[CharCode.TRIPLE_BAR] = 240;
-    map[CharCode.PI] = 227;
-    map[CharCode.BLACK_HEART_SUIT] = 3;
-    return map;
-  }
-
   void drawGlyph(int x, int y, Glyph glyph) {
     _display.setGlyph(x, y, glyph);
   }
@@ -106,7 +100,7 @@ class RetroTerminal extends RenderableTerminal {
       var char = glyph.char;
 
       // See if it's a Unicode character that needs to be remapped.
-      var fromUnicode = _unicodeMap[char];
+      var fromUnicode = _UNICODE_MAP[char];
       if (fromUnicode != null) char = fromUnicode;
 
       var sx = (char % 32) * _charWidth;
