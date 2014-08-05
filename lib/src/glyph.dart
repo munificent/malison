@@ -89,7 +89,9 @@ class Glyph {
 class CharCode {
   static const SPACE = 0x0020;
   static const ASTERISK = 0x002a;
+  static const MIDDLE_DOT = 0x00b7;
   static const BULLET = 0x2022;
+  static const BULLET_OPERATOR = 0x2219;
   static const LEFT_RIGHT_ARROW = 0x2194;
   static const UP_DOWN_ARROW = 0x2195;
   static const SOLID = 0x2588;
