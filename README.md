@@ -38,7 +38,7 @@ void main() {
 
   // You can also draw individual glyphs -- character+color units.
   terminal.drawGlyph(3, 4, new Glyph.fromCharCode(CharCode.BLACK_HEART_SUIT,
-      Color.RED, Color.WHITE);
+      Color.RED, Color.WHITE));
 
   // When you're done drawing, tell it to render all of the changes. It renders
   // in batches for performance.
