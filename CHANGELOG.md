@@ -1,3 +1,7 @@
+## 0.2.1
+
+* Fix bad assert in `Screen._bind()`.
+
 ## 0.2.0
 
 * Redo key input handling. Instead of a (mostly broken) `Keyboard` class, it
@@ -6,7 +10,7 @@
 
 * Refactor `UserInterface` and clean up how opaque/transparent screens are
   handled.
-  
+
 * Remove (useless) `write()` method.
 
 * Handle semicolon keyCode difference between Firefox (59) and Chrome (186).

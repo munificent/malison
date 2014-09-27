@@ -1,3 +1,6 @@
 pubspec.lock
 packages
 build/
+
+# IntelliJ project.
+.idea
