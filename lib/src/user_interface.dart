@@ -123,7 +123,7 @@ class Screen {
 
   /// Binds this screen to [ui].
   void _bind(UserInterface ui) {
-    assert(ui == null);
+    assert(_ui == null);
     _ui = ui;
   }
 
