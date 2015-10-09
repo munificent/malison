@@ -15,12 +15,11 @@ import 'terminal.dart';
 /// which screens can use to map raw keypresses to something higher-level.
 class UserInterface {
   final keyBindings = new KeyBindings();
-  final List<Screen>  _screens;
+  final List<Screen> _screens;
   RenderableTerminal _terminal;
   bool _dirty;
 
-  UserInterface(this._terminal)
-  : _screens = <Screen>[] {
+  UserInterface(this._terminal) : _screens = <Screen>[] {
     html.document.body.onKeyDown.listen(_keyDown);
   }
 
@@ -59,7 +58,9 @@ class UserInterface {
     _render();
   }
 
-  void dirty() { _dirty = true; }
+  void dirty() {
+    _dirty = true;
+  }
 
   void refresh() {
     for (var screen in _screens) screen.update();
@@ -74,8 +75,8 @@ class UserInterface {
     // Firefox uses 59 for semicolon.
     if (keyCode == 59) keyCode = KeyCode.SEMICOLON;
 
-    var input = keyBindings.find(keyCode, shift: event.shiftKey,
-        alt: event.altKey);
+    var input =
+        keyBindings.find(keyCode, shift: event.shiftKey, alt: event.altKey);
 
     if (input != null) {
       // Bound keys are always consumed, even if the screen doesn't use it.
@@ -83,8 +84,7 @@ class UserInterface {
       if (screen.handleInput(input)) return;
     }
 
-    if (screen.keyDown(keyCode, shift: event.shiftKey,
-        alt: event.altKey)) {
+    if (screen.keyDown(keyCode, shift: event.shiftKey, alt: event.altKey)) {
       event.preventDefault();
     }
   }

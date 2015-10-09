@@ -1,7 +1,5 @@
 library malison.key_bindings;
 
-import 'dart:html' as html;
-
 class KeyBindings {
   /// The high-level inputs and the low level keyboard bindings that are mapped
   /// to them.
@@ -35,11 +33,11 @@ class _KeyBinding {
 
   _KeyBinding(this.charCode, {this.shift, this.alt});
 
-  bool operator==(other) {
+  bool operator ==(other) {
     if (other is! _KeyBinding) return false;
     return charCode == other.charCode &&
-           shift == other.shift &&
-           alt == other.alt;
+        shift == other.shift &&
+        alt == other.alt;
   }
 
   int get hashCode => charCode.hashCode ^ shift.hashCode ^ alt.hashCode;

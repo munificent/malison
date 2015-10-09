@@ -54,9 +54,9 @@ class Glyph {
   /// [Color.BLACK].
   static const CLEAR = const Glyph.fromCharCode(CharCode.SPACE);
 
-  final int    char;
-  final Color  fore;
-  final Color  back;
+  final int char;
+  final Color fore;
+  final Color back;
 
   Glyph(String char, [Color fore, Color back])
       : char = char.codeUnits[0],
@@ -74,9 +74,7 @@ class Glyph {
 
   operator ==(other) {
     if (other is! Glyph) return false;
-    return char == other.char &&
-        fore == other.fore &&
-        back == other.back;
+    return char == other.char && fore == other.fore && back == other.back;
   }
 }
 

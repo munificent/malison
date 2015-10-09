@@ -1,5 +1,6 @@
 pubspec.lock
 packages
+.packages
 build/
 
 # IntelliJ project.

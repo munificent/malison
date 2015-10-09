@@ -34,8 +34,8 @@ abstract class Terminal {
     for (var i = 0; i < text.length; i++) {
       if (x + i >= width) break;
       // TODO: Is codeUnits[] the right thing here? Is it fast?
-      drawGlyph(x + i, y,
-          new Glyph.fromCharCode(text.codeUnits[i], fore, back));
+      drawGlyph(
+          x + i, y, new Glyph.fromCharCode(text.codeUnits[i], fore, back));
     }
   }
 

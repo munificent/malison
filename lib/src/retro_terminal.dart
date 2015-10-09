@@ -108,11 +108,8 @@ class RetroTerminal extends RenderableTerminal {
 
       // Fill the background.
       _context.fillStyle = glyph.back.cssColor;
-      _context.fillRect(
-          x * _charWidth * _scale,
-          y * _charHeight * _scale,
-          _charWidth * _scale,
-          _charHeight * _scale);
+      _context.fillRect(x * _charWidth * _scale, y * _charHeight * _scale,
+          _charWidth * _scale, _charHeight * _scale);
 
       // Don't bother drawing empty characters.
       if (char == 0 || char == CharCode.SPACE) return;
@@ -120,8 +117,12 @@ class RetroTerminal extends RenderableTerminal {
       var color = _getColorFont(glyph.fore);
       // *2 because the font image is double-sized. That ensures it stays
       // sharp on retina displays and doesn't render scaled up.
-      _context.drawImageScaledFromSource(color,
-          sx * 2, sy * 2, _charWidth * 2, _charHeight * 2,
+      _context.drawImageScaledFromSource(
+          color,
+          sx * 2,
+          sy * 2,
+          _charWidth * 2,
+          _charHeight * 2,
           x * _charWidth * _scale,
           y * _charHeight * _scale,
           _charWidth * _scale,
