@@ -33,15 +33,20 @@ abstract class Terminal {
     // TODO: Bounds check.
     for (var i = 0; i < text.length; i++) {
       if (x + i >= width) break;
-      // TODO: Is codeUnits[] the right thing here? Is it fast?
       drawGlyph(
-          x + i, y, new Glyph.fromCharCode(text.codeUnits[i], fore, back));
+          x + i, y, new Glyph.fromCharCode(text.codeUnitAt(i), fore, back));
     }
   }
 
   Terminal rect(int x, int y, int width, int height) {
     // TODO: Bounds check.
     return new PortTerminal(x, y, new Vec(width, height), this);
+  }
+
+  /// Writes a one-character string consisting of [charCode] at column [x],
+  /// row [y] using [fore] as the text color and [back] as the background color.
+  void drawChar(int x, int y, int charCode, [Color fore, Color back]) {
+    drawGlyph(x, y, new Glyph.fromCharCode(charCode, fore, back));
   }
 
   void drawGlyph(int x, int y, Glyph glyph);

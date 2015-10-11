@@ -16,24 +16,24 @@ class RetroTerminal extends RenderableTerminal {
   final Display _display;
 
   final html.CanvasElement _canvas;
-  html.CanvasRenderingContext2D _context;
-  html.ImageElement _font;
-
-  int get width => _display.width;
-  int get height => _display.height;
-  Vec get size => _display.size;
+  final html.CanvasRenderingContext2D _context;
+  final html.ImageElement _font;
 
   /// A cache of the tinted font images. Each key is a color, and the image
   /// will is the font in that color.
   final Map<Color, html.CanvasElement> _fontColorCache = {};
 
   /// The drawing scale, used to adapt to Retina displays.
-  int _scale = 1;
+  final int _scale = html.window.devicePixelRatio.toInt();
 
   bool _imageLoaded = false;
 
   final int _charWidth;
   final int _charHeight;
+
+  int get width => _display.width;
+  int get height => _display.height;
+  Vec get size => _display.size;
 
   static final _UNICODE_MAP = const {
     CharCode.BULLET: 7,
@@ -53,36 +53,43 @@ class RetroTerminal extends RenderableTerminal {
   };
 
   /// Creates a new terminal using a built-in DOS-like font.
-  RetroTerminal.dos(int width, int height, html.CanvasElement canvas)
-      : this(width, height, canvas, "packages/malison/dos.png",
-            charWidth: 9, charHeight: 16);
+  factory RetroTerminal.dos(int width, int height,
+          [html.CanvasElement canvas]) =>
+      new RetroTerminal(width, height, "packages/malison/dos.png",
+          canvas: canvas, charWidth: 9, charHeight: 16);
 
   /// Creates a new terminal using a short built-in DOS-like font.
-  RetroTerminal.shortDos(int width, int height, html.CanvasElement canvas)
-      : this(width, height, canvas, "packages/malison/dos-short.png",
-            charWidth: 9, charHeight: 13);
+  factory RetroTerminal.shortDos(int width, int height,
+          [html.CanvasElement canvas]) =>
+      new RetroTerminal(width, height, "packages/malison/dos-short.png",
+          canvas: canvas, charWidth: 9, charHeight: 13);
 
   /// Creates a new terminal using a font image at [imageUrl].
-  RetroTerminal(int width, int height, this._canvas, String imageUrl,
-      {int charWidth, int charHeight})
-      : _display = new Display(width, height),
-        _charWidth = charWidth,
-        _charHeight = charHeight {
-    _context = _canvas.context2D;
-
-    // Handle high-resolution (i.e. retina) displays.
-    if (html.window.devicePixelRatio > 1) {
-      _scale = 2;
+  factory RetroTerminal(int width, int height, String imageUrl,
+      {html.CanvasElement canvas, int charWidth, int charHeight}) {
+    // If not given a canvas, create one and add it to the page.
+    if (canvas == null) {
+      canvas = new html.CanvasElement();
+      html.document.body.append(canvas);
     }
 
-    var canvasWidth = _charWidth * width;
-    var canvasHeight = _charHeight * height;
+    var display = new Display(width, height);
+
+    return new RetroTerminal._(display, charWidth, charHeight, canvas,
+        new html.ImageElement(src: imageUrl));
+  }
+
+  RetroTerminal._(this._display, this._charWidth, this._charHeight,
+      html.CanvasElement canvas, this._font)
+      : _canvas = canvas,
+        _context = canvas.context2D {
+    var canvasWidth = _charWidth * _display.width;
+    var canvasHeight = _charHeight * _display.height;
     _canvas.width = canvasWidth * _scale;
     _canvas.height = canvasHeight * _scale;
     _canvas.style.width = '${canvasWidth}px';
     _canvas.style.height = '${canvasHeight}px';
 
-    _font = new html.ImageElement(src: imageUrl);
     _font.onLoad.listen((_) {
       _imageLoaded = true;
       render();

@@ -1,3 +1,9 @@
+## 0.3.0
+
+* Automatically create a canvas if not given one.
+* Allow creating a `UserInterface` without an initial terminal.
+* Add an example app.
+
 ## 0.2.1
 
 * Fix bad assert in `Screen._bind()`.

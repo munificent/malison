@@ -1,5 +1,6 @@
 library malison.user_interface;
 
+import 'dart:async';
 import 'dart:html' as html;
 
 import 'key_bindings.dart';
@@ -14,14 +15,50 @@ import 'terminal.dart';
 /// In addition, the interface can define a number of global [KeyBindings]
 /// which screens can use to map raw keypresses to something higher-level.
 class UserInterface {
-  final keyBindings = new KeyBindings();
-  final List<Screen> _screens;
-  RenderableTerminal _terminal;
-  bool _dirty;
+  /// Keyboard bindings for key press events.
+  final keyPress = new KeyBindings();
 
-  UserInterface(this._terminal) : _screens = <Screen>[] {
-    html.document.body.onKeyDown.listen(_keyDown);
+  final List<Screen> _screens = [];
+  RenderableTerminal _terminal;
+  bool _dirty = true;
+
+  StreamSubscription<html.KeyEvent> _keyDownSubscription;
+
+  /// Whether or not the UI is listening for keyboard events.
+  ///
+  /// Initially off.
+  bool get handlingInput => _keyDownSubscription != null;
+  set handlingInput(bool value) {
+    if (value == handlingInput) return;
+
+    if (value) {
+      _keyDownSubscription = html.document.body.onKeyDown.listen(_keyDown);
+    } else {
+      _keyDownSubscription.cancel();
+      _keyDownSubscription = null;
+    }
   }
+
+  /// Whether or not the game loop is running and the UI is refreshing itself
+  /// every frame.
+  ///
+  /// Initially off.
+  ///
+  /// If you want to manually refresh the UI yourself when you know it needs
+  /// to be updated -- maybe your game is explicitly turn-based -- you can
+  /// leave this off.
+  bool get running => _running;
+  bool _running = false;
+  set running(bool value) {
+    if (value == _running) return;
+
+    _running = value;
+    if (_running) {
+      html.window.requestAnimationFrame(_tick);
+    }
+  }
+
+  UserInterface([this._terminal]);
 
   void setTerminal(RenderableTerminal terminal) {
     _terminal = terminal;
@@ -68,16 +105,15 @@ class UserInterface {
   }
 
   void _keyDown(html.KeyEvent event) {
-    var screen = _screens.last;
-
     var keyCode = event.keyCode;
 
     // Firefox uses 59 for semicolon.
     if (keyCode == 59) keyCode = KeyCode.SEMICOLON;
 
     var input =
-        keyBindings.find(keyCode, shift: event.shiftKey, alt: event.altKey);
+        keyPress.find(keyCode, shift: event.shiftKey, alt: event.altKey);
 
+    var screen = _screens.last;
     if (input != null) {
       // Bound keys are always consumed, even if the screen doesn't use it.
       event.preventDefault();
@@ -89,7 +125,17 @@ class UserInterface {
     }
   }
 
+  /// Called every animation frame while the UI's game loop is running.
+  void _tick(time) {
+    refresh();
+
+    if (_running) html.window.requestAnimationFrame(_tick);
+  }
+
   void _render() {
+    // If the UI isn't currentl bound to a terminal, there's nothing to render.
+    if (_terminal == null) return;
+
     _terminal.clear();
 
     // Skip past all of the covered screens.
