@@ -25,9 +25,9 @@ int terminalIndex = 0;
 
 main() {
   // Set up the keybindings.
-  ui.keyPress.bind("next terminal", KeyCode.TAB);
-  ui.keyPress.bind("prev terminal", KeyCode.TAB, shift: true);
-  ui.keyPress.bind("animate", KeyCode.SPACE);
+  ui.keyPress.bind("next terminal", KeyCode.tab);
+  ui.keyPress.bind("prev terminal", KeyCode.tab, shift: true);
+  ui.keyPress.bind("animate", KeyCode.space);
 
   updateTerminal();
 
@@ -47,13 +47,13 @@ class MainScreen extends Screen {
 
   MainScreen() {
     var colors = [
-      Color.RED, Color.ORANGE, Color.GOLD, Color.YELLOW,
-      Color.GREEN, Color.AQUA, Color.BLUE, Color.PURPLE
+      Color.red, Color.orange, Color.gold, Color.yellow,
+      Color.green, Color.aqua, Color.blue, Color.purple
     ];
 
     var random = new math.Random();
 
-    for (var char in [CharCode.BULLET, CharCode.ASTERISK, "O".codeUnitAt(0)]) {
+    for (var char in [CharCode.bullet, CharCode.asterisk, "O".codeUnitAt(0)]) {
       for (var color in colors) {
         balls.add(new Ball(color, char,
             random.nextDouble() * Ball.pitWidth,
@@ -101,29 +101,29 @@ class MainScreen extends Screen {
     terminal.clear();
 
     colorBar(int y, String name, Color light, Color medium, Color dark) {
-      terminal.writeAt(2, y, name, Color.GRAY);
+      terminal.writeAt(2, y, name, Color.gray);
       terminal.writeAt(10, y, "light", light);
       terminal.writeAt(16, y, "medium", medium);
       terminal.writeAt(23, y, "dark", dark);
 
-      terminal.writeAt(28, y, " light ", Color.BLACK, light);
-      terminal.writeAt(35, y, " medium ", Color.BLACK, medium);
-      terminal.writeAt(43, y, " dark ", Color.BLACK, dark);
+      terminal.writeAt(28, y, " light ", Color.black, light);
+      terminal.writeAt(35, y, " medium ", Color.black, medium);
+      terminal.writeAt(43, y, " dark ", Color.black, dark);
     }
 
     terminal.writeAt(0, 0, "Predefined colors:");
-    terminal.writeAt(59, 0, "switch terminal [tab]", Color.DARK_GRAY);
-    terminal.writeAt(75, 0, "[tab]", Color.LIGHT_GRAY);
-    colorBar(1, "gray", Color.LIGHT_GRAY, Color.GRAY, Color.DARK_GRAY);
-    colorBar(2, "red", Color.LIGHT_RED, Color.RED, Color.DARK_RED);
-    colorBar(3, "orange", Color.LIGHT_ORANGE, Color.ORANGE, Color.DARK_ORANGE);
-    colorBar(4, "gold", Color.LIGHT_GOLD, Color.GOLD, Color.DARK_GOLD);
-    colorBar(5, "yellow", Color.LIGHT_YELLOW, Color.YELLOW, Color.DARK_YELLOW);
-    colorBar(6, "green", Color.LIGHT_GREEN, Color.GREEN, Color.DARK_GREEN);
-    colorBar(7, "aqua", Color.LIGHT_AQUA, Color.AQUA, Color.DARK_AQUA);
-    colorBar(8, "blue", Color.LIGHT_BLUE, Color.BLUE, Color.DARK_BLUE);
-    colorBar(9, "purple", Color.LIGHT_PURPLE, Color.PURPLE, Color.DARK_PURPLE);
-    colorBar(10, "brown", Color.LIGHT_BROWN, Color.BROWN, Color.DARK_BROWN);
+    terminal.writeAt(59, 0, "switch terminal [tab]", Color.darkGray);
+    terminal.writeAt(75, 0, "[tab]", Color.lightGray);
+    colorBar(1, "gray", Color.lightGray, Color.gray, Color.darkGray);
+    colorBar(2, "red", Color.lightRed, Color.red, Color.darkRed);
+    colorBar(3, "orange", Color.lightOrange, Color.orange, Color.darkOrange);
+    colorBar(4, "gold", Color.lightGold, Color.gold, Color.darkGold);
+    colorBar(5, "yellow", Color.lightYellow, Color.yellow, Color.darkYellow);
+    colorBar(6, "green", Color.lightGreen, Color.green, Color.darkGreen);
+    colorBar(7, "aqua", Color.lightAqua, Color.aqua, Color.darkAqua);
+    colorBar(8, "blue", Color.lightBlue, Color.blue, Color.darkBlue);
+    colorBar(9, "purple", Color.lightPurple, Color.purple, Color.darkPurple);
+    colorBar(10, "brown", Color.lightBrown, Color.brown, Color.darkBrown);
 
     terminal.writeAt(0, 12, "Code page 437:");
     var lines = [
@@ -147,12 +147,12 @@ class MainScreen extends Screen {
 
     var y = 13;
     for (var line in lines) {
-      terminal.writeAt(3, y++, line, Color.LIGHT_GRAY);
+      terminal.writeAt(3, y++, line, Color.lightGray);
     }
 
     terminal.writeAt(22, 12, "Simple game loop:");
-    terminal.writeAt(66, 12, "toggle [space]", Color.DARK_GRAY);
-    terminal.writeAt(73, 12, "[space]", Color.LIGHT_GRAY);
+    terminal.writeAt(66, 12, "toggle [space]", Color.darkGray);
+    terminal.writeAt(73, 12, "[space]", Color.lightGray);
 
     for (var ball in balls) {
       ball.render(terminal);

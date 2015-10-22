@@ -20,7 +20,7 @@ abstract class Terminal {
   void clear() {
     for (var y = 0; y < height; y++) {
       for (var x = 0; x < width; x++) {
-        drawGlyph(x, y, Glyph.CLEAR);
+        drawGlyph(x, y, Glyph.clear);
       }
     }
   }
@@ -28,8 +28,8 @@ abstract class Terminal {
   /// Writes [text] starting at column [x], row [y] using [fore] as the text
   /// color and [back] as the background color.
   void writeAt(int x, int y, String text, [Color fore, Color back]) {
-    if (fore == null) fore = Color.WHITE;
-    if (back == null) back = Color.BLACK;
+    if (fore == null) fore = Color.white;
+    if (back == null) back = Color.black;
 
     // TODO: Bounds check.
     for (var i = 0; i < text.length; i++) {

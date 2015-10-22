@@ -48,7 +48,7 @@ class Display {
 
   Display(int width, int height)
       : _glyphs = new Array2D<Glyph>(width, height),
-        _changedGlyphs = new Array2D<Glyph>(width, height, Glyph.CLEAR);
+        _changedGlyphs = new Array2D<Glyph>(width, height, Glyph.clear);
 
   /// Sets the cell at [x], [y], to [glyph].
   void setGlyph(int x, int y, Glyph glyph) {

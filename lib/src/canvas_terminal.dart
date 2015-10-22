@@ -24,7 +24,8 @@ class CanvasTerminal extends RenderableTerminal {
   int get width => _display.width;
   int get height => _display.height;
 
-  factory CanvasTerminal(int width, int height, Font font, [html.CanvasElement canvas]) {
+  factory CanvasTerminal(int width, int height, Font font,
+      [html.CanvasElement canvas]) {
     var display = new Display(width, height);
 
     // If not given a canvas, create one and add it to the page.
@@ -65,7 +66,7 @@ class CanvasTerminal extends RenderableTerminal {
           _font.charWidth * _scale, _font.lineHeight * _scale);
 
       // Don't bother drawing empty characters.
-      if (char == 0 || char == CharCode.SPACE) return;
+      if (char == 0 || char == CharCode.space) return;
 
       _context.fillStyle = glyph.fore.cssColor;
       _context.fillText(new String.fromCharCodes([char]),

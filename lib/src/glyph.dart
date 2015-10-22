@@ -3,48 +3,48 @@ library malison.glyph;
 import 'char_code.dart';
 
 class Color {
-  static const BLACK        = const Color('#000');
-  static const WHITE        = const Color('#fff');
+  static const black       = const Color('#000');
+  static const white       = const Color('#fff');
 
-  static const LIGHT_GRAY   = const Color('rgb(192, 192, 192)');
-  static const GRAY         = const Color('rgb(128, 128, 128)');
-  static const DARK_GRAY    = const Color('rgb(64, 64, 64)');
+  static const lightGray   = const Color('rgb(192, 192, 192)');
+  static const gray        = const Color('rgb(128, 128, 128)');
+  static const darkGray    = const Color('rgb(64, 64, 64)');
 
-  static const LIGHT_RED    = const Color('rgb(255, 160, 160)');
-  static const RED          = const Color('rgb(220, 0, 0)');
-  static const DARK_RED     = const Color('rgb(100, 0, 0)');
+  static const lightRed    = const Color('rgb(255, 160, 160)');
+  static const red         = const Color('rgb(220, 0, 0)');
+  static const darkRed     = const Color('rgb(100, 0, 0)');
 
-  static const LIGHT_ORANGE = const Color('rgb(255, 200, 170)');
-  static const ORANGE       = const Color('rgb(255, 128, 0)');
-  static const DARK_ORANGE  = const Color('rgb(128, 64, 0)');
+  static const lightOrange = const Color('rgb(255, 200, 170)');
+  static const orange      = const Color('rgb(255, 128, 0)');
+  static const darkOrange  = const Color('rgb(128, 64, 0)');
 
-  static const LIGHT_GOLD   = const Color('rgb(255, 230, 150)');
-  static const GOLD         = const Color('rgb(255, 192, 0)');
-  static const DARK_GOLD    = const Color('rgb(128, 96, 0)');
+  static const lightGold   = const Color('rgb(255, 230, 150)');
+  static const gold        = const Color('rgb(255, 192, 0)');
+  static const darkGold    = const Color('rgb(128, 96, 0)');
 
-  static const LIGHT_YELLOW = const Color('rgb(255, 255, 150)');
-  static const YELLOW       = const Color('rgb(255, 255, 0)');
-  static const DARK_YELLOW  = const Color('rgb(128, 128, 0)');
+  static const lightYellow = const Color('rgb(255, 255, 150)');
+  static const yellow      = const Color('rgb(255, 255, 0)');
+  static const darkYellow  = const Color('rgb(128, 128, 0)');
 
-  static const LIGHT_GREEN  = const Color('rgb(130, 255, 90)');
-  static const GREEN        = const Color('rgb(0, 128, 0)');
-  static const DARK_GREEN   = const Color('rgb(0, 64, 0)');
+  static const lightGreen  = const Color('rgb(130, 255, 90)');
+  static const green       = const Color('rgb(0, 128, 0)');
+  static const darkGreen   = const Color('rgb(0, 64, 0)');
 
-  static const LIGHT_AQUA   = const Color('rgb(128, 255, 255)');
-  static const AQUA         = const Color('rgb(0, 255, 255)');
-  static const DARK_AQUA    = const Color('rgb(0, 128, 128)');
+  static const lightAqua   = const Color('rgb(128, 255, 255)');
+  static const aqua        = const Color('rgb(0, 255, 255)');
+  static const darkAqua    = const Color('rgb(0, 128, 128)');
 
-  static const LIGHT_BLUE   = const Color('rgb(128, 160, 255)');
-  static const BLUE         = const Color('rgb(0, 64, 255)');
-  static const DARK_BLUE    = const Color('rgb(0, 37, 168)');
+  static const lightBlue   = const Color('rgb(128, 160, 255)');
+  static const blue        = const Color('rgb(0, 64, 255)');
+  static const darkBlue    = const Color('rgb(0, 37, 168)');
 
-  static const LIGHT_PURPLE = const Color('rgb(200, 140, 255)');
-  static const PURPLE       = const Color('rgb(128, 0, 255)');
-  static const DARK_PURPLE  = const Color('rgb(64, 0, 128)');
+  static const lightPurple = const Color('rgb(200, 140, 255)');
+  static const purple      = const Color('rgb(128, 0, 255)');
+  static const darkPurple  = const Color('rgb(64, 0, 128)');
 
-  static const LIGHT_BROWN  = const Color('rgb(190, 150, 100)');
-  static const BROWN        = const Color('rgb(160, 110, 60)');
-  static const DARK_BROWN   = const Color('rgb(100, 64, 32)');
+  static const lightBrown  = const Color('rgb(190, 150, 100)');
+  static const brown       = const Color('rgb(160, 110, 60)');
+  static const darkBrown   = const Color('rgb(100, 64, 32)');
 
   final String cssColor;
 
@@ -54,7 +54,7 @@ class Color {
 class Glyph {
   /// The empty glyph: a clear glyph using the default background color
   /// [Color.BLACK].
-  static const CLEAR = const Glyph.fromCharCode(CharCode.SPACE);
+  static const clear = const Glyph.fromCharCode(CharCode.space);
 
   final int char;
   final Color fore;
@@ -62,12 +62,12 @@ class Glyph {
 
   Glyph(String char, [Color fore, Color back])
       : char = char.codeUnits[0],
-        fore = fore != null ? fore : Color.WHITE,
-        back = back != null ? back : Color.BLACK;
+        fore = fore != null ? fore : Color.white,
+        back = back != null ? back : Color.black;
 
   const Glyph.fromCharCode(this.char, [Color fore, Color back])
-      : fore = fore != null ? fore : Color.WHITE,
-        back = back != null ? back : Color.BLACK;
+      : fore = fore != null ? fore : Color.white,
+        back = back != null ? back : Color.black;
 
   factory Glyph.fromDynamic(charOrCharCode, [Color fore, Color back]) {
     if (charOrCharCode is String) return new Glyph(charOrCharCode, fore, back);

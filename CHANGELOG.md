@@ -1,6 +1,7 @@
 ## 0.4.0
 
 * Add constants to `CharCode` for every character in code page 437.
+* Make constants `lowerCamelCase`.
 
 ## 0.3.0
 
