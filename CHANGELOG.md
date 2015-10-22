@@ -1,3 +1,7 @@
+## 0.4.1
+
+* Fix semicolon handling on Firefox.
+
 ## 0.4.0
 
 * Add constants to `CharCode` for every character in code page 437.

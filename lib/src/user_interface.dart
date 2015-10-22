@@ -108,7 +108,7 @@ class UserInterface {
     var keyCode = event.keyCode;
 
     // Firefox uses 59 for semicolon.
-    if (keyCode == 59) keyCode = KeyCode.SEMICOLON;
+    if (keyCode == 59) keyCode = KeyCode.semicolon;
 
     var input =
         keyPress.find(keyCode, shift: event.shiftKey, alt: event.altKey);
