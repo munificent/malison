@@ -125,7 +125,32 @@ class MainScreen extends Screen {
     colorBar(9, "purple", Color.LIGHT_PURPLE, Color.PURPLE, Color.DARK_PURPLE);
     colorBar(10, "brown", Color.LIGHT_BROWN, Color.BROWN, Color.DARK_BROWN);
 
-    terminal.writeAt(0, 12, "Simple game loop for animation:");
+    terminal.writeAt(0, 12, "Code page 437:");
+    var lines = [
+      " ☺☻♥♦♣♠•◘○◙♂♀♪♫☼",
+      "►◄↕‼¶§▬↨↑↓→←∟↔▲▼",
+      " !\"#\$%&'()*+,-./",
+      "0123456789:;<=>?",
+      "@ABCDEFGHIJKLMNO",
+      "PQRSTUVWXYZ[\\]^_",
+      "`abcdefghijklmno",
+      "pqrstuvwxyz{|}~⌂",
+      "ÇüéâäàåçêëèïîìÄÅ",
+      "ÉæÆôöòûùÿÖÜ¢£¥₧ƒ",
+      "áíóúñÑªº¿⌐¬½¼¡«»",
+      "░▒▓│┤╡╢╖╕╣║╗╝╜╛┐",
+      "└┴┬├─┼╞╟╚╔╩╦╠═╬╧",
+      "╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀",
+      "αßΓπΣσµτΦΘΩδ∞φε∩",
+      "≡±≥≤⌠⌡÷≈°∙·√ⁿ²■"
+    ];
+
+    var y = 13;
+    for (var line in lines) {
+      terminal.writeAt(3, y++, line, Color.LIGHT_GRAY);
+    }
+
+    terminal.writeAt(22, 12, "Simple game loop:");
     terminal.writeAt(66, 12, "toggle [space]", Color.DARK_GRAY);
     terminal.writeAt(73, 12, "[space]", Color.LIGHT_GRAY);
 
@@ -136,7 +161,7 @@ class MainScreen extends Screen {
 }
 
 class Ball {
-  static const pitWidth = 78.0;
+  static const pitWidth = 56.0;
   static const pitHeight = 17.0;
 
   final Color color;
@@ -165,6 +190,6 @@ class Ball {
   }
 
   void render(Terminal terminal) {
-    terminal.drawChar(2 + x.toInt(), 13 + y.toInt(), charCode, color);
+    terminal.drawChar(24 + x.toInt(), 13 + y.toInt(), charCode, color);
   }
 }

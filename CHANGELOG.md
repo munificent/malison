@@ -1,3 +1,7 @@
+## 0.4.0
+
+* Add constants to `CharCode` for every character in code page 437.
+
 ## 0.3.0
 
 * Automatically create a canvas if not given one.

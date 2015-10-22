@@ -1,5 +1,7 @@
 library malison.glyph;
 
+import 'char_code.dart';
+
 class Color {
   static const BLACK        = const Color('#000');
   static const WHITE        = const Color('#fff');
@@ -76,29 +78,4 @@ class Glyph {
     if (other is! Glyph) return false;
     return char == other.char && fore == other.fore && back == other.back;
   }
-}
-
-/// Unicode code points for various special characters that also exist on
-/// [code page 437][font].
-///
-/// [font]: http://en.wikipedia.org/wiki/Code_page_437
-// Note: If you add stuff to this, make sure to add an appropriate mapping in
-// canvas_terminal.dart.
-class CharCode {
-  static const SPACE                        = 0x0020;
-  static const ASTERISK                     = 0x002a;
-  static const MIDDLE_DOT                   = 0x00b7;
-  static const BULLET                       = 0x2022;
-  static const BULLET_OPERATOR              = 0x2219;
-  static const LEFT_RIGHT_ARROW             = 0x2194;
-  static const UP_DOWN_ARROW                = 0x2195;
-  static const SOLID                        = 0x2588;
-  static const HALF_LEFT                    = 0x258c;
-  static const BLACK_UP_POINTING_TRIANGLE   = 0x25b2;
-  static const BLACK_SPADE_SUIT             = 0x2660;
-  static const BLACK_CLUB_SUIT              = 0x2663;
-  static const BOX_DRAWINGS_LIGHT_VERTICAL  = 0x2502;
-  static const TRIPLE_BAR                   = 0x2261;
-  static const PI                           = 0x03C0;
-  static const BLACK_HEART_SUIT             = 0x2665;
 }

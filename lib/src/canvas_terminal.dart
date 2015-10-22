@@ -4,6 +4,7 @@ import 'dart:html' as html;
 
 import 'package:piecemeal/piecemeal.dart';
 
+import 'char_code.dart';
 import 'glyph.dart';
 import 'display.dart';
 import 'terminal.dart';

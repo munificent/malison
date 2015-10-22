@@ -30,6 +30,7 @@ abstract class Terminal {
   void writeAt(int x, int y, String text, [Color fore, Color back]) {
     if (fore == null) fore = Color.WHITE;
     if (back == null) back = Color.BLACK;
+
     // TODO: Bounds check.
     for (var i = 0; i < text.length; i++) {
       if (x + i >= width) break;
