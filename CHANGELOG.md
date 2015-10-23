@@ -1,3 +1,7 @@
+## 0.4.2
+
+* Widen constraint on piecemeal.
+
 ## 0.4.1
 
 * Fix semicolon handling on Firefox.
