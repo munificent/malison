@@ -22,7 +22,7 @@ class UserInterface {
   RenderableTerminal _terminal;
   bool _dirty = true;
 
-  StreamSubscription<html.KeyEvent> _keyDownSubscription;
+  StreamSubscription<html.KeyboardEvent> _keyDownSubscription;
 
   /// Whether or not the UI is listening for keyboard events.
   ///
@@ -104,7 +104,7 @@ class UserInterface {
     if (_dirty) _render();
   }
 
-  void _keyDown(html.KeyEvent event) {
+  void _keyDown(html.KeyboardEvent event) {
     var keyCode = event.keyCode;
 
     // Firefox uses 59 for semicolon.
@@ -126,7 +126,7 @@ class UserInterface {
   }
 
   /// Called every animation frame while the UI's game loop is running.
-  void _tick(time) {
+  void _tick(num time) {
     refresh();
 
     if (_running) html.window.requestAnimationFrame(_tick);
