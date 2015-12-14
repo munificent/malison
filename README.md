@@ -34,11 +34,11 @@ void main() {
   terminal.writeAt(0, 0, "This is a terminal!");
 
   // You can control the foreground and background color.
-  terminal.writeAt(0, 1, "This is blue on green", Color.BLUE, Color.GREEN);
+  terminal.writeAt(0, 1, "This is blue on green", Color.blue, Color.green);
 
   // You can also draw individual glyphs -- character+color units.
-  terminal.drawGlyph(3, 4, new Glyph.fromCharCode(CharCode.BLACK_HEART_SUIT,
-      Color.RED, Color.WHITE));
+  terminal.drawGlyph(3, 4, new Glyph.fromCharCode(CharCode.blackHeartSuit,
+      Color.red, Color.white));
 
   // When you're done drawing, tell it to render all of the changes. It renders
   // in batches for performance.
