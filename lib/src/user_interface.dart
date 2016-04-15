@@ -14,11 +14,11 @@ import 'terminal.dart';
 ///
 /// In addition, the interface can define a number of global [KeyBindings]
 /// which screens can use to map raw keypresses to something higher-level.
-class UserInterface {
+class UserInterface<T> {
   /// Keyboard bindings for key press events.
-  final keyPress = new KeyBindings();
+  final keyPress = new KeyBindings<T>();
 
-  final List<Screen> _screens = [];
+  final List<Screen<T>> _screens = [];
   RenderableTerminal _terminal;
   bool _dirty = true;
 
@@ -66,7 +66,7 @@ class UserInterface {
   }
 
   /// Pushes [screen] onto the top of the stack.
-  void push(Screen screen) {
+  void push(Screen<T> screen) {
     screen._bind(this);
     _screens.add(screen);
     _render();
@@ -86,7 +86,7 @@ class UserInterface {
   /// Switches the current top screen to [screen].
   ///
   /// This is equivalent to a [pop] followed by a [push].
-  void goTo(Screen screen) {
+  void goTo(Screen<T> screen) {
     var old = _screens.removeLast();
     old._unbind();
 
@@ -156,11 +156,11 @@ class UserInterface {
   }
 }
 
-class Screen {
-  UserInterface _ui;
+class Screen<T> {
+  UserInterface<T> _ui;
 
   /// The [UserInterface] this screen is bound to.
-  UserInterface get ui => _ui;
+  UserInterface<T> get ui => _ui;
 
   /// Whether this screen allows any screens under it to be visible.
   ///
@@ -168,7 +168,7 @@ class Screen {
   bool get isTransparent => false;
 
   /// Binds this screen to [ui].
-  void _bind(UserInterface ui) {
+  void _bind(UserInterface<T> ui) {
     assert(_ui == null);
     _ui = ui;
   }
@@ -196,14 +196,14 @@ class Screen {
   ///
   /// If this returns `false` (the default), then the lower-level [keyDown]
   /// method will be called.
-  bool handleInput(Object input) => false;
+  bool handleInput(T input) => false;
 
   bool keyDown(int keyCode, {bool shift, bool alt}) => false;
 
   /// Called when the screen above this one ([popped]) has been popped and this
   /// screen is now the top-most screen. If a value was passed to [pop()], it
   /// will be passed to this as [result].
-  void activate(Screen popped, result) {}
+  void activate(Screen<T> popped, result) {}
 
   void update() {}
   void render(Terminal terminal) {}

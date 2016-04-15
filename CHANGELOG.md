@@ -1,3 +1,8 @@
+## 0.5.0
+
+* Add type parameters to `UserInterface`, `KeyBindings`, and
+  `Screen` so that the bound objects can be precisely typed.
+
 ## 0.4.3
 
 * Make strong mode clean.
