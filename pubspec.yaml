@@ -1,5 +1,5 @@
 name: malison
-version: 0.5.0
+version: 0.5.1
 author: Bob Nystrom <robert@stuffwithstuff.com>
 description: A little terminal UI package for the browser.
 homepage: https://github.com/munificent/malison

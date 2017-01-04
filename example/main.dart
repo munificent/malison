@@ -6,7 +6,7 @@ import 'package:malison/malison.dart';
 const width = 80;
 const height = 30;
 
-final UserInterface ui = new UserInterface();
+final ui = new UserInterface<String>();
 
 /// A few different terminals to choose from.
 final terminals = [
@@ -23,7 +23,7 @@ final terminals = [
 /// Index of the current terminal in [terminals].
 int terminalIndex = 0;
 
-main() {
+void main() {
   // Set up the keybindings.
   ui.keyPress.bind("next terminal", KeyCode.tab);
   ui.keyPress.bind("prev terminal", KeyCode.tab, shift: true);
@@ -37,12 +37,12 @@ main() {
   ui.running = true;
 }
 
-updateTerminal() {
+void updateTerminal() {
   html.document.body.children.clear();
   ui.setTerminal(terminals[terminalIndex]());
 }
 
-class MainScreen extends Screen {
+class MainScreen extends Screen<String> {
   final List<Ball> balls = [];
 
   MainScreen() {
@@ -64,7 +64,7 @@ class MainScreen extends Screen {
     }
   }
 
-  bool handleInput(Object input) {
+  bool handleInput(String input) {
     switch (input) {
       case "next terminal":
         terminalIndex = (terminalIndex + 1) % terminals.length;
@@ -100,7 +100,7 @@ class MainScreen extends Screen {
   void render(Terminal terminal) {
     terminal.clear();
 
-    colorBar(int y, String name, Color light, Color medium, Color dark) {
+    void colorBar(int y, String name, Color light, Color medium, Color dark) {
       terminal.writeAt(2, y, name, Color.gray);
       terminal.writeAt(10, y, "light", light);
       terminal.writeAt(16, y, "medium", medium);

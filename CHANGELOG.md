@@ -1,3 +1,7 @@
+## 0.5.1
+
+* Get rid of implicit casts and dynamic.
+
 ## 0.5.0
 
 * Add type parameters to `UserInterface`, `KeyBindings`, and

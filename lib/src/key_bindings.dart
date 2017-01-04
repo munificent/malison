@@ -33,11 +33,14 @@ class _KeyBinding {
 
   _KeyBinding(this.charCode, {this.shift, this.alt});
 
-  bool operator ==(other) {
-    if (other is! _KeyBinding) return false;
-    return charCode == other.charCode &&
-        shift == other.shift &&
-        alt == other.alt;
+  bool operator ==(Object other) {
+    if (other is _KeyBinding) {
+      return charCode == other.charCode &&
+          shift == other.shift &&
+          alt == other.alt;
+    }
+
+    return false;
   }
 
   int get hashCode => charCode.hashCode ^ shift.hashCode ^ alt.hashCode;

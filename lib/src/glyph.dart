@@ -69,13 +69,16 @@ class Glyph {
       : fore = fore != null ? fore : Color.white,
         back = back != null ? back : Color.black;
 
-  factory Glyph.fromDynamic(charOrCharCode, [Color fore, Color back]) {
+  factory Glyph.fromDynamic(Object charOrCharCode, [Color fore, Color back]) {
     if (charOrCharCode is String) return new Glyph(charOrCharCode, fore, back);
-    return new Glyph.fromCharCode(charOrCharCode, fore, back);
+    return new Glyph.fromCharCode(charOrCharCode as int, fore, back);
   }
 
-  operator ==(other) {
-    if (other is! Glyph) return false;
-    return char == other.char && fore == other.fore && back == other.back;
+  operator ==(Object other) {
+    if (other is Glyph) {
+      return char == other.char && fore == other.fore && back == other.back;
+    }
+
+    return false;
   }
 }

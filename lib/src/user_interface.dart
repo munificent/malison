@@ -76,7 +76,7 @@ class UserInterface<T> {
   ///
   /// The next screen down is activated. If [result] is given, it is passed to
   /// the new active screen's [activate] method.
-  void pop([result]) {
+  void pop([Object result]) {
     var screen = _screens.removeLast();
     screen._unbind();
     _screens[_screens.length - 1].activate(screen, result);
@@ -139,7 +139,7 @@ class UserInterface<T> {
     _terminal.clear();
 
     // Skip past all of the covered screens.
-    var i;
+    int i;
     for (i = _screens.length - 1; i >= 0; i--) {
       if (!_screens[i].isTransparent) break;
     }
@@ -203,7 +203,7 @@ class Screen<T> {
   /// Called when the screen above this one ([popped]) has been popped and this
   /// screen is now the top-most screen. If a value was passed to [pop()], it
   /// will be passed to this as [result].
-  void activate(Screen<T> popped, result) {}
+  void activate(Screen<T> popped, Object result) {}
 
   void update() {}
   void render(Terminal terminal) {}
