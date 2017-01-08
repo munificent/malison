@@ -1,5 +1,3 @@
-library malison.user_interface;
-
 import 'dart:async';
 import 'dart:html' as html;
 

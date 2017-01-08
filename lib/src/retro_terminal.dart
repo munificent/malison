@@ -1,5 +1,3 @@
-library malison.retro_terminal;
-
 import 'dart:html' as html;
 
 import 'package:piecemeal/piecemeal.dart';

@@ -2,6 +2,7 @@ import 'dart:html' as html;
 import 'dart:math' as math;
 
 import 'package:malison/malison.dart';
+import 'package:malison/malison_web.dart';
 
 const width = 80;
 const height = 30;

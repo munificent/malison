@@ -1,5 +1,3 @@
-library malison.port_terminal;
-
 import 'package:piecemeal/piecemeal.dart';
 
 import 'glyph.dart';

@@ -1,5 +1,3 @@
-library malison.char_code;
-
 /// Unicode code points for various special characters that also exist on
 /// [code page 437][font].
 ///

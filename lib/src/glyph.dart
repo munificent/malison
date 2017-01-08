@@ -1,5 +1,3 @@
-library malison.glyph;
-
 import 'char_code.dart';
 
 class Color {

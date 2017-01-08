@@ -1,5 +1,3 @@
-library malison.key_bindings;
-
 class KeyBindings<T> {
   /// The high-level inputs and the low level keyboard bindings that are mapped
   /// to them.

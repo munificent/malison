@@ -1,3 +1,10 @@
+## 0.6.0
+
+* Split into two libraries. The core malison library does not import "dart:html"
+  and can be used in command-line applications. It's not *useful* outside of
+  the web, but it lets you test code in a "headless" fashion that uses malison
+  on the standalone VM.
+
 ## 0.5.1
 
 * Get rid of implicit casts and dynamic.
