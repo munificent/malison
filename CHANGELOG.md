@@ -2,6 +2,7 @@
 
 * Fill in the rest of the character codes to `CharCode`.
 * Add `Color.blend()` and store colors as RGB.
+* Add `foreColor`, `backColor`, and `fill()` to Terminal.
 
 ## 0.6.0
 

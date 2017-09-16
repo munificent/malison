@@ -1,5 +1,6 @@
 import 'package:piecemeal/piecemeal.dart';
 
+import 'char_code.dart';
 import 'glyph.dart';
 import 'port_terminal.dart';
 
@@ -14,11 +15,26 @@ abstract class Terminal {
   /// The number of columns and rows.
   Vec get size;
 
-  /// Clears the terminal to black.
+  /// The default foreground color used when a color is not specified.
+  Color foreColor = Color.white;
+
+  /// The default foreground color used when a color is not specified.
+  Color backColor = Color.black;
+
+  /// Clears the terminal to [backColor].
   void clear() {
-    for (var y = 0; y < height; y++) {
-      for (var x = 0; x < width; x++) {
-        drawGlyph(x, y, Glyph.clear);
+    fill(0, 0, width, height);
+  }
+
+  /// Clears and fills the given rectangle with [color].
+  void fill(int x, int y, int width, int height, [Color color]) {
+    if (color == null) color = backColor;
+
+    var glyph = new Glyph.fromCharCode(CharCode.space, foreColor, color);
+
+    for (var py = y; py < y + height; py++) {
+      for (var px = x; px < x + width; px++) {
+        drawGlyph(px, py, glyph);
       }
     }
   }
@@ -26,8 +42,8 @@ abstract class Terminal {
   /// Writes [text] starting at column [x], row [y] using [fore] as the text
   /// color and [back] as the background color.
   void writeAt(int x, int y, String text, [Color fore, Color back]) {
-    if (fore == null) fore = Color.white;
-    if (back == null) back = Color.black;
+    if (fore == null) fore = foreColor;
+    if (back == null) back = backColor;
 
     // TODO: Bounds check.
     for (var i = 0; i < text.length; i++) {
