@@ -1,6 +1,7 @@
-## 0.6.1
+## 0.7.0
 
-* Fill in the rest of the CharCodes.
+* Fill in the rest of the character codes to `CharCode`.
+* Add `Color.blend()` and store colors as RGB.
 
 ## 0.6.0
 

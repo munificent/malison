@@ -10,7 +10,7 @@ const height = 30;
 final ui = new UserInterface<String>();
 
 /// A few different terminals to choose from.
-final terminals = [
+final terminals = <RenderableTerminal Function()>[
   () => new RetroTerminal.dos(width, height),
   () => new RetroTerminal.shortDos(width, height),
   () => new CanvasTerminal(width, height,
