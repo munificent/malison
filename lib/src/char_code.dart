@@ -3,9 +3,6 @@
 ///
 /// [font]: http://en.wikipedia.org/wiki/Code_page_437
 class CharCode {
-  static const space = 0x0020;
-  static const asterisk = 0x002a;
-
   // 1 - 15.
   static const whiteSmilingFace = 0x263a;
   static const blackSmilingFace = 0x263b;
@@ -41,7 +38,108 @@ class CharCode {
   static const blackUpPointingTriangle = 0x25b2;
   static const blackDownPointingTriangle = 0x25bc;
 
-  // 127.
+  // 32 - 47.
+  static const space = 0x0020;
+  static const exclamationPoint = 0x0021;
+  static const doubleQuote = 0x0022;
+  static const numberSign = 0x0023;
+  static const dollarSign = 0x0024;
+  static const percent = 0x0025;
+  static const ampersand = 0x0026;
+  static const apostrophe = 0x0027;
+  static const leftParenthesis = 0x0028;
+  static const rightParenthesis = 0x0029;
+  static const asterisk = 0x002a;
+  static const plus = 0x002b;
+  static const comma = 0x002c;
+  static const minus = 0x002d;
+  static const period = 0x002e;
+  static const slash = 0x002f;
+
+  // 48 - 63.
+  static const zero = 0x0030;
+  static const one = 0x0031;
+  static const two = 0x0032;
+  static const three = 0x0033;
+  static const four = 0x0034;
+  static const five = 0x0035;
+  static const six = 0x0036;
+  static const seven = 0x0037;
+  static const eight = 0x0038;
+  static const nine = 0x0039;
+  static const colon = 0x003a;
+  static const semicolon = 0x003b;
+  static const lessThan = 0x003c;
+  static const equals = 0x003d;
+  static const greaterThan = 0x003e;
+  static const questionMark = 0x003f;
+
+  // 64 - 95.
+  static const at = 0x0040;
+  static const aUpper = 0x0041;
+  static const bUpper = 0x0042;
+  static const cUpper = 0x0043;
+  static const dUpper = 0x0044;
+  static const eUpper = 0x0045;
+  static const fUpper = 0x0046;
+  static const gUpper = 0x0047;
+  static const hUpper = 0x0048;
+  static const iUpper = 0x0049;
+  static const jUpper = 0x004a;
+  static const kUpper = 0x004b;
+  static const lUpper = 0x004c;
+  static const mUpper = 0x004d;
+  static const nUpper = 0x004e;
+  static const oUpper = 0x004f;
+  static const pUpper = 0x0050;
+  static const qUpper = 0x0051;
+  static const rUpper = 0x0052;
+  static const sUpper = 0x0053;
+  static const tUpper = 0x0054;
+  static const uUpper = 0x0055;
+  static const vUpper = 0x0056;
+  static const wUpper = 0x0057;
+  static const xUpper = 0x0058;
+  static const yUpper = 0x0059;
+  static const zUpper = 0x005a;
+  static const leftBracket = 0x005b;
+  static const backSlash = 0x005c;
+  static const rightBracket = 0x005d;
+  static const caret = 0x005e;
+  static const underscore = 0x005f;
+
+  // 96 - 127.
+  static const accent = 0x0060;
+  static const aLower = 0x0061;
+  static const bLower = 0x0062;
+  static const cLower = 0x0063;
+  static const dLower = 0x0064;
+  static const eLower = 0x0065;
+  static const fLower = 0x0066;
+  static const gLower = 0x0067;
+  static const hLower = 0x0068;
+  static const iLower = 0x0069;
+  static const jLower = 0x006a;
+  static const kLower = 0x006b;
+  static const lLower = 0x006c;
+  static const mLower = 0x006d;
+  static const nLower = 0x006e;
+  static const oLower = 0x006f;
+  static const pLower = 0x0070;
+  static const qLower = 0x0071;
+  static const rLower = 0x0072;
+  static const sLower = 0x0073;
+  static const tLower = 0x0074;
+  static const uLower = 0x0075;
+  static const vLower = 0x0076;
+  static const wLower = 0x0077;
+  static const xLower = 0x0078;
+  static const yLower = 0x0079;
+  static const zLower = 0x007a;
+  static const leftBrace = 0x007b;
+  static const pipe = 0x007c;
+  static const rightBrace = 0x007d;
+  static const tilde = 0x007e;
   static const house = 0x2302;
 
   // 128 - 143.

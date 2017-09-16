@@ -1,3 +1,7 @@
+## 0.6.1
+
+* Fill in the rest of the CharCodes.
+
 ## 0.6.0
 
 * Split into two libraries. The core malison library does not import "dart:html"
