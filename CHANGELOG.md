@@ -1,3 +1,8 @@
+## 0.8.0
+
+* Change `Color.blend()` to take a value from (0, 1.0) instead of a percent.
+* Add `Color.add()`.
+
 ## 0.7.0
 
 * Fill in the rest of the character codes to `CharCode`.

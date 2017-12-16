@@ -62,14 +62,24 @@ class Color {
     return false;
   }
 
-  Color blend(Color other, int percentOther) {
-    var fractionOther = percentOther / 100;
+  Color add(Color other, [double fractionOther]) {
+    fractionOther ??= 1.0;
+    return new Color(
+        (r + other.r * fractionOther).clamp(0, 255).toInt(),
+        (g + other.g * fractionOther).clamp(0, 255).toInt(),
+        (b + other.b * fractionOther).clamp(0, 255).toInt());
+  }
+
+  Color blend(Color other, double fractionOther) {
     var fractionThis = 1.0 - fractionOther;
     return new Color(
         (r * fractionThis + other.r * fractionOther).toInt(),
         (g * fractionThis + other.g * fractionOther).toInt(),
         (b * fractionThis + other.b * fractionOther).toInt());
   }
+
+  Color blendPercent(Color other, int percentOther) =>
+      blend(other, percentOther / 100);
 }
 
 class Glyph {
