@@ -59,15 +59,18 @@ class CanvasTerminal extends RenderableTerminal {
 
       // Fill the background.
       _context.fillStyle = glyph.back.cssColor;
-      _context.fillRect(x * _font.charWidth * _scale,
+      _context.fillRect(
+          x * _font.charWidth * _scale,
           y * _font.lineHeight * _scale,
-          _font.charWidth * _scale, _font.lineHeight * _scale);
+          _font.charWidth * _scale,
+          _font.lineHeight * _scale);
 
       // Don't bother drawing empty characters.
       if (char == 0 || char == CharCode.space) return;
 
       _context.fillStyle = glyph.fore.cssColor;
-      _context.fillText(new String.fromCharCodes([char]),
+      _context.fillText(
+          new String.fromCharCodes([char]),
           (x * _font.charWidth + _font.x) * _scale,
           (y * _font.lineHeight + _font.y) * _scale);
     });
