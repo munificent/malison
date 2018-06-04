@@ -1,3 +1,7 @@
+## 0.9.0
+
+* `keyUp()` events.
+
 ## 0.8.0
 
 * Change `Color.blend()` to take a value from (0, 1.0) instead of a percent.

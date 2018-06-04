@@ -21,6 +21,7 @@ class UserInterface<T> {
   bool _dirty = true;
 
   StreamSubscription<html.KeyboardEvent> _keyDownSubscription;
+  StreamSubscription<html.KeyboardEvent> _keyUpSubscription;
 
   /// Whether or not the UI is listening for keyboard events.
   ///
@@ -31,9 +32,13 @@ class UserInterface<T> {
 
     if (value) {
       _keyDownSubscription = html.document.body.onKeyDown.listen(_keyDown);
+      _keyUpSubscription = html.document.body.onKeyUp.listen(_keyUp);
     } else {
       _keyDownSubscription.cancel();
       _keyDownSubscription = null;
+
+      _keyUpSubscription.cancel();
+      _keyUpSubscription = null;
     }
   }
 
@@ -123,6 +128,18 @@ class UserInterface<T> {
     }
   }
 
+  void _keyUp(html.KeyboardEvent event) {
+    var keyCode = event.keyCode;
+
+    // Firefox uses 59 for semicolon.
+    if (keyCode == 59) keyCode = KeyCode.semicolon;
+
+    var screen = _screens.last;
+    if (screen.keyUp(keyCode, shift: event.shiftKey, alt: event.altKey)) {
+      event.preventDefault();
+    }
+  }
+
   /// Called every animation frame while the UI's game loop is running.
   void _tick(num time) {
     refresh();
@@ -197,6 +214,8 @@ class Screen<T> {
   bool handleInput(T input) => false;
 
   bool keyDown(int keyCode, {bool shift, bool alt}) => false;
+
+  bool keyUp(int keyCode, {bool shift, bool alt}) => false;
 
   /// Called when the screen above this one ([popped]) has been popped and this
   /// screen is now the top-most screen. If a value was passed to [pop()], it
