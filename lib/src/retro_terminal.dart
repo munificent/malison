@@ -220,13 +220,13 @@ class RetroTerminal extends RenderableTerminal {
   /// Creates a new terminal using a built-in DOS-like font.
   factory RetroTerminal.dos(int width, int height,
           [html.CanvasElement canvas]) =>
-      new RetroTerminal(width, height, "packages/malison/dos.png",
+      RetroTerminal(width, height, "packages/malison/dos.png",
           canvas: canvas, charWidth: 9, charHeight: 16);
 
   /// Creates a new terminal using a short built-in DOS-like font.
   factory RetroTerminal.shortDos(int width, int height,
           [html.CanvasElement canvas]) =>
-      new RetroTerminal(width, height, "packages/malison/dos-short.png",
+      RetroTerminal(width, height, "packages/malison/dos-short.png",
           canvas: canvas, charWidth: 9, charHeight: 13);
 
   /// Creates a new terminal using a font image at [imageUrl].
@@ -234,14 +234,14 @@ class RetroTerminal extends RenderableTerminal {
       {html.CanvasElement canvas, int charWidth, int charHeight}) {
     // If not given a canvas, create one and add it to the page.
     if (canvas == null) {
-      canvas = new html.CanvasElement();
+      canvas = html.CanvasElement();
       html.document.body.append(canvas);
     }
 
-    var display = new Display(width, height);
+    var display = Display(width, height);
 
-    return new RetroTerminal._(display, charWidth, charHeight, canvas,
-        new html.ImageElement(src: imageUrl));
+    return RetroTerminal._(display, charWidth, charHeight, canvas,
+        html.ImageElement(src: imageUrl));
   }
 
   RetroTerminal._(this._display, this._charWidth, this._charHeight,
@@ -303,14 +303,14 @@ class RetroTerminal extends RenderableTerminal {
   }
 
   Vec pixelToChar(Vec pixel) =>
-      new Vec(pixel.x ~/ _charWidth, pixel.y ~/ _charHeight);
+      Vec(pixel.x ~/ _charWidth, pixel.y ~/ _charHeight);
 
   html.CanvasElement _getColorFont(Color color) {
     var cached = _fontColorCache[color];
     if (cached != null) return cached;
 
     // Create a font using the given color.
-    var tint = new html.CanvasElement(width: _font.width, height: _font.height);
+    var tint = html.CanvasElement(width: _font.width, height: _font.height);
     var context = tint.context2D;
 
     // Draw the font.

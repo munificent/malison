@@ -1,18 +1,18 @@
 class KeyBindings<T> {
   /// The high-level inputs and the low level keyboard bindings that are mapped
   /// to them.
-  final _bindings = new Map<_KeyBinding, T>();
+  final _bindings = Map<_KeyBinding, T>();
 
   void bind(T input, int keyCode, {bool shift, bool alt}) {
     if (shift == null) shift = false;
     if (alt == null) alt = false;
-    _bindings[new _KeyBinding(keyCode, shift: shift, alt: alt)] = input;
+    _bindings[_KeyBinding(keyCode, shift: shift, alt: alt)] = input;
   }
 
   T find(int keyCode, {bool shift, bool alt}) {
     if (shift == null) shift = false;
     if (alt == null) alt = false;
-    return _bindings[new _KeyBinding(keyCode, shift: shift, alt: alt)];
+    return _bindings[_KeyBinding(keyCode, shift: shift, alt: alt)];
   }
 }
 

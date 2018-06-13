@@ -27,6 +27,6 @@ class PortTerminal extends Terminal {
   Terminal rect(int x, int y, int width, int height) {
     // TODO: Bounds check.
     // Overridden so we can flatten out nested PortTerminals.
-    return new PortTerminal(_x + x, _y + y, new Vec(width, height), _root);
+    return PortTerminal(_x + x, _y + y, Vec(width, height), _root);
   }
 }

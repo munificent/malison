@@ -14,7 +14,7 @@ import 'terminal.dart';
 /// which screens can use to map raw keypresses to something higher-level.
 class UserInterface<T> {
   /// Keyboard bindings for key press events.
-  final keyPress = new KeyBindings<T>();
+  final keyPress = KeyBindings<T>();
 
   final List<Screen<T>> _screens = [];
   RenderableTerminal _terminal;

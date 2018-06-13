@@ -24,15 +24,15 @@ class CanvasTerminal extends RenderableTerminal {
 
   factory CanvasTerminal(int width, int height, Font font,
       [html.CanvasElement canvas]) {
-    var display = new Display(width, height);
+    var display = Display(width, height);
 
     // If not given a canvas, create one and add it to the page.
     if (canvas == null) {
-      canvas = new html.CanvasElement();
+      canvas = html.CanvasElement();
       html.document.body.append(canvas);
     }
 
-    return new CanvasTerminal._(display, font, canvas);
+    return CanvasTerminal._(display, font, canvas);
   }
 
   CanvasTerminal._(this._display, this._font, html.CanvasElement canvas)
@@ -70,14 +70,14 @@ class CanvasTerminal extends RenderableTerminal {
 
       _context.fillStyle = glyph.fore.cssColor;
       _context.fillText(
-          new String.fromCharCodes([char]),
+          String.fromCharCodes([char]),
           (x * _font.charWidth + _font.x) * _scale,
           (y * _font.lineHeight + _font.y) * _scale);
     });
   }
 
   Vec pixelToChar(Vec pixel) =>
-      new Vec(pixel.x ~/ _font.charWidth, pixel.y ~/ _font.lineHeight);
+      Vec(pixel.x ~/ _font.charWidth, pixel.y ~/ _font.lineHeight);
 }
 
 /// Describes a font used by [CanvasTerminal].

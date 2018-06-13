@@ -7,18 +7,18 @@ import 'package:malison/malison_web.dart';
 const width = 80;
 const height = 30;
 
-final ui = new UserInterface<String>();
+final ui = UserInterface<String>();
 
 /// A few different terminals to choose from.
 final terminals = <RenderableTerminal Function()>[
-  () => new RetroTerminal.dos(width, height),
-  () => new RetroTerminal.shortDos(width, height),
-  () => new CanvasTerminal(width, height,
-      new Font('Menlo, Consolas', size: 12, w: 8, h: 14, x: 1, y: 11)),
-  () => new CanvasTerminal(
-      width, height, new Font('Courier', size: 13, w: 10, h: 15, x: 1, y: 11)),
-  () => new CanvasTerminal(
-      width, height, new Font('Courier', size: 12, w: 8, h: 14, x: 1, y: 10))
+  () => RetroTerminal.dos(width, height),
+  () => RetroTerminal.shortDos(width, height),
+  () => CanvasTerminal(width, height,
+      Font('Menlo, Consolas', size: 12, w: 8, h: 14, x: 1, y: 11)),
+  () => CanvasTerminal(
+      width, height, Font('Courier', size: 13, w: 10, h: 15, x: 1, y: 11)),
+  () => CanvasTerminal(
+      width, height, Font('Courier', size: 12, w: 8, h: 14, x: 1, y: 10))
 ];
 
 /// Index of the current terminal in [terminals].
@@ -32,7 +32,7 @@ void main() {
 
   updateTerminal();
 
-  ui.push(new MainScreen());
+  ui.push(MainScreen());
 
   ui.handlingInput = true;
   ui.running = true;
@@ -58,11 +58,11 @@ class MainScreen extends Screen<String> {
       Color.purple
     ];
 
-    var random = new math.Random();
+    var random = math.Random();
 
     for (var char in [CharCode.bullet, CharCode.asterisk, "O".codeUnitAt(0)]) {
       for (var color in colors) {
-        balls.add(new Ball(
+        balls.add(Ball(
             color,
             char,
             random.nextDouble() * Ball.pitWidth,

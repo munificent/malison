@@ -1,3 +1,7 @@
+## 0.10.0
+
+* Update to Dart 2. Remove `new` and `const` keywords.
+
 ## 0.9.0
 
 * `keyUp()` events.

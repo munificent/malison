@@ -30,7 +30,7 @@ abstract class Terminal {
   void fill(int x, int y, int width, int height, [Color color]) {
     if (color == null) color = backColor;
 
-    var glyph = new Glyph.fromCharCode(CharCode.space, foreColor, color);
+    var glyph = Glyph.fromCharCode(CharCode.space, foreColor, color);
 
     for (var py = y; py < y + height; py++) {
       for (var px = x; px < x + width; px++) {
@@ -48,20 +48,19 @@ abstract class Terminal {
     // TODO: Bounds check.
     for (var i = 0; i < text.length; i++) {
       if (x + i >= width) break;
-      drawGlyph(
-          x + i, y, new Glyph.fromCharCode(text.codeUnitAt(i), fore, back));
+      drawGlyph(x + i, y, Glyph.fromCharCode(text.codeUnitAt(i), fore, back));
     }
   }
 
   Terminal rect(int x, int y, int width, int height) {
     // TODO: Bounds check.
-    return new PortTerminal(x, y, new Vec(width, height), this);
+    return PortTerminal(x, y, Vec(width, height), this);
   }
 
   /// Writes a one-character string consisting of [charCode] at column [x],
   /// row [y] using [fore] as the text color and [back] as the background color.
   void drawChar(int x, int y, int charCode, [Color fore, Color back]) {
-    drawGlyph(x, y, new Glyph.fromCharCode(charCode, fore, back));
+    drawGlyph(x, y, Glyph.fromCharCode(charCode, fore, back));
   }
 
   void drawGlyph(int x, int y, Glyph glyph);

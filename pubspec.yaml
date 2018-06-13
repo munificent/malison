@@ -1,12 +1,13 @@
 name: malison
-version: 0.9.0
+version: 0.10.0
 author: Bob Nystrom <robert@stuffwithstuff.com>
 description: A little terminal UI package for the browser.
 homepage: https://github.com/munificent/malison
 dependencies:
-  piecemeal: ">=0.2.0 <0.4.0"
+  piecemeal: "^0.3.7"
 dev_dependencies:
   browser: any
-  unittest: any
+  build_runner: any
+  build_web_compilers: any
 environment:
-  sdk: ">=1.24.0 <2.0.0"
+  sdk: ">=2.0.0-dev.62.0 <2.0.0"

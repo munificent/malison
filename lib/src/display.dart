@@ -45,8 +45,8 @@ class Display {
   Vec get size => _glyphs.size;
 
   Display(int width, int height)
-      : _glyphs = new Array2D<Glyph>(width, height),
-        _changedGlyphs = new Array2D<Glyph>(width, height, Glyph.clear);
+      : _glyphs = Array2D(width, height),
+        _changedGlyphs = Array2D(width, height, Glyph.clear);
 
   /// Sets the cell at [x], [y], to [glyph].
   void setGlyph(int x, int y, Glyph glyph) {

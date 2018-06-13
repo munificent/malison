@@ -1,7 +1,8 @@
 pubspec.lock
+.dart_tool/
 .packages
-.pub
+.pub/
 build/
 
 # IntelliJ project.
-.idea
+.idea/
