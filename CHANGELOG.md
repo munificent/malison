@@ -1,3 +1,16 @@
+## 0.11.0
+
+* Don't resize the canvas given to `RetroTerminal`.
+
+* Allow controlling the scaling for `RetroTerminal`.
+
+* Don't require double-sized source images for `RetroTerminal`. Instead, it
+  uses `imageSmoothingEnabled` to ensure pixels don't get fuzzy when drawing
+  from the font canvas.
+
+  This is a breaking change because it means custom font images, which used to
+  have to be double-sized, should no longer be.
+
 ## 0.10.0
 
 * Update to Dart 2. Remove `new` and `const` keywords.

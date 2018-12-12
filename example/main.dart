@@ -29,6 +29,7 @@ void main() {
   ui.keyPress.bind("next terminal", KeyCode.tab);
   ui.keyPress.bind("prev terminal", KeyCode.tab, shift: true);
   ui.keyPress.bind("animate", KeyCode.space);
+  ui.keyPress.bind("profile", KeyCode.p);
 
   updateTerminal();
 
@@ -60,7 +61,7 @@ class MainScreen extends Screen<String> {
 
     var random = math.Random();
 
-    for (var char in [CharCode.bullet, CharCode.asterisk, "O".codeUnitAt(0)]) {
+    for (var char in "0123456789".codeUnits) {
       for (var color in colors) {
         balls.add(Ball(
             color,
@@ -91,11 +92,23 @@ class MainScreen extends Screen<String> {
         ui.running = !ui.running;
         break;
 
+      case "profile":
+        profile();
+        break;
+
       default:
         return false;
     }
 
     return true;
+  }
+
+  void profile() {
+    ui.running = true;
+    for (var i = 0; i < 1000; i++) {
+      update();
+      ui.refresh();
+    }
   }
 
   void update() {
