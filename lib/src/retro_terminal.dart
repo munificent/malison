@@ -53,7 +53,7 @@ class RetroTerminal extends RenderableTerminal {
     scale ??= html.window.devicePixelRatio.toInt();
 
     // If not given a canvas, create one, automatically size it, and add it to
-    //  the page.
+    // the page.
     if (canvas == null) {
       scale ??= html.window.devicePixelRatio.toInt();
 

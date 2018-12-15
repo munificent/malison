@@ -117,8 +117,14 @@ class KeyCode {
   static const numpad9 = 105;
 
   static const semicolon = 186;
+  static const equals = 187;
   static const comma = 188;
+  static const hyphen = 189;
   static const period = 190;
   static const slash = 191;
+  static const backtick = 192;
+  static const leftBracket = 219;
+  static const backslash = 220;
+  static const rightBracket = 221;
   static const apostrophe = 222;
 }

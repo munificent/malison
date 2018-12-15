@@ -1,3 +1,7 @@
+## 0.11.1
+
+* Add more key codes to `KeyCode`.
+
 ## 0.11.0
 
 * Don't resize the canvas given to `RetroTerminal`.
