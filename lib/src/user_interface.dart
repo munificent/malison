@@ -1,6 +1,8 @@
 import 'dart:async';
 import 'dart:html' as html;
 
+import 'package:piecemeal/piecemeal.dart';
+
 import 'key_bindings.dart';
 import 'terminal.dart';
 
@@ -27,6 +29,7 @@ class UserInterface<T> {
   ///
   /// Initially off.
   bool get handlingInput => _keyDownSubscription != null;
+
   set handlingInput(bool value) {
     if (value == handlingInput) return;
 
@@ -52,6 +55,7 @@ class UserInterface<T> {
   /// leave this off.
   bool get running => _running;
   bool _running = false;
+
   set running(bool value) {
     if (value == _running) return;
 
@@ -64,8 +68,18 @@ class UserInterface<T> {
   UserInterface([this._terminal]);
 
   void setTerminal(RenderableTerminal terminal) {
+    var resized = terminal != null &&
+        (_terminal == null ||
+            _terminal.width != terminal.width ||
+            _terminal.height != terminal.height);
+
     _terminal = terminal;
     dirty();
+
+    // If the terminal size changed, let the screens known.
+    if (resized) {
+      for (var screen in _screens) screen.resize(terminal.size);
+    }
   }
 
   /// Pushes [screen] onto the top of the stack.
@@ -186,6 +200,8 @@ class Screen<T> {
   void _bind(UserInterface<T> ui) {
     assert(_ui == null);
     _ui = ui;
+
+    resize(ui._terminal.size);
   }
 
   /// Unbinds this screen from the [ui] that owns it.
@@ -223,5 +239,10 @@ class Screen<T> {
   void activate(Screen<T> popped, Object result) {}
 
   void update() {}
+
   void render(Terminal terminal) {}
+
+  /// Called when the [UserInterface] has been bound to a new terminal with a
+  /// different size while this [Screen] is present.
+  void resize(Vec size) {}
 }

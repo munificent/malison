@@ -1,3 +1,8 @@
+## 0.11.2
+
+* Add `Screen.resize()` and call it when the `UserInterface` gets bound to a
+  terminal with a different size.
+
 ## 0.11.1
 
 * Add more key codes to `KeyCode`.
