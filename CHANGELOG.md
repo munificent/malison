@@ -1,3 +1,8 @@
+## 0.11.3
+
+* Fix concurrent modification error when screens are pushed or popped from
+  within `update()`.
+
 ## 0.11.2
 
 * Add `Screen.resize()` and call it when the `UserInterface` gets bound to a

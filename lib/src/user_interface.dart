@@ -117,7 +117,12 @@ class UserInterface<T> {
   }
 
   void refresh() {
-    for (var screen in _screens) screen.update();
+    // Don't use a for-in loop here so that we don't run into concurrent
+    // modification exceptions if a screen is added or removed during a call to
+    // update().
+    for (var i = 0; i < _screens.length; i++) {
+      _screens[i].update();
+    }
     if (_dirty) _render();
   }
 
