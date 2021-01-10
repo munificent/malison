@@ -129,6 +129,48 @@ class UserInterface<T> {
   void _keyDown(html.KeyboardEvent event) {
     var keyCode = event.keyCode;
 
+    // If the keypress happened on the numpad, translate the keyCode.
+    if (event.location == 3) {
+      switch (keyCode) {
+        case KeyCode.zero:
+          keyCode = KeyCode.numpad0;
+          break;
+        case KeyCode.one:
+          keyCode = KeyCode.numpad1;
+          break;
+        case KeyCode.two:
+          keyCode = KeyCode.numpad2;
+          break;
+        case KeyCode.three:
+          keyCode = KeyCode.numpad3;
+          break;
+        case KeyCode.four:
+          keyCode = KeyCode.numpad4;
+          break;
+        case KeyCode.five:
+          keyCode = KeyCode.numpad5;
+          break;
+        case KeyCode.six:
+          keyCode = KeyCode.numpad6;
+          break;
+        case KeyCode.seven:
+          keyCode = KeyCode.numpad7;
+          break;
+        case KeyCode.eight:
+          keyCode = KeyCode.numpad8;
+          break;
+        case KeyCode.nine:
+          keyCode = KeyCode.numpad9;
+          break;
+        case KeyCode.equals:
+          keyCode = KeyCode.numpadEquals;
+          break;
+        case KeyCode.enter:
+          keyCode = KeyCode.numpadEnter;
+          break;
+      }
+    }
+
     // Firefox uses 59 for semicolon.
     if (keyCode == 59) keyCode = KeyCode.semicolon;
 

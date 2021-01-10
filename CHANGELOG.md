@@ -1,3 +1,7 @@
+## 0.11.4
+
+* Translate key codes for numpad keys.
+
 ## 0.11.3
 
 * Fix concurrent modification error when screens are pushed or popped from

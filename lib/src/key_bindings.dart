@@ -115,6 +115,14 @@ class KeyCode {
   static const numpad7 = 103;
   static const numpad8 = 104;
   static const numpad9 = 105;
+  static const numpadClear = 12;
+  static const numpadMultiply = 106;
+  static const numpadAdd = 107;
+  static const numpadSubtract = 109;
+  static const numpadDecimal = 110;
+  static const numpadDivide = 111;
+  static const numpadEquals = 1000;
+  static const numpadEnter = 1001;
 
   static const semicolon = 186;
   static const equals = 187;
