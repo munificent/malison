@@ -1,3 +1,7 @@
+## 0.12.0
+
+* Migrate to null safety.
+
 ## 0.11.4
 
 * Translate key codes for numpad keys.

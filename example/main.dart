@@ -40,7 +40,7 @@ void main() {
 }
 
 void updateTerminal() {
-  html.document.body.children.clear();
+  html.document.body!.children.clear();
   ui.setTerminal(terminals[terminalIndex]());
 }
 

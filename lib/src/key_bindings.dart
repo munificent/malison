@@ -3,15 +3,11 @@ class KeyBindings<T> {
   /// to them.
   final _bindings = Map<_KeyBinding, T>();
 
-  void bind(T input, int keyCode, {bool shift, bool alt}) {
-    if (shift == null) shift = false;
-    if (alt == null) alt = false;
+  void bind(T input, int keyCode, {bool shift = false, bool alt = false}) {
     _bindings[_KeyBinding(keyCode, shift: shift, alt: alt)] = input;
   }
 
-  T find(int keyCode, {bool shift, bool alt}) {
-    if (shift == null) shift = false;
-    if (alt == null) alt = false;
+  T? find(int keyCode, {bool shift = false, bool alt = false}) {
     return _bindings[_KeyBinding(keyCode, shift: shift, alt: alt)];
   }
 }
@@ -29,7 +25,7 @@ class _KeyBinding {
   /// Whether this key binding requires the alt modifier key to be pressed.
   final bool alt;
 
-  _KeyBinding(this.charCode, {this.shift, this.alt});
+  _KeyBinding(this.charCode, {required this.shift, required this.alt});
 
   bool operator ==(Object other) {
     if (other is _KeyBinding) {

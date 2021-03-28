@@ -62,7 +62,7 @@ class Color {
     return false;
   }
 
-  Color add(Color other, [double fractionOther]) {
+  Color add(Color other, [double? fractionOther]) {
     fractionOther ??= 1.0;
     return Color(
         (r + other.r * fractionOther).clamp(0, 255).toInt(),
@@ -91,16 +91,16 @@ class Glyph {
   final Color fore;
   final Color back;
 
-  Glyph(String char, [Color fore, Color back])
+  Glyph(String char, [Color? fore, Color? back])
       : char = char.codeUnits[0],
         fore = fore != null ? fore : Color.white,
         back = back != null ? back : Color.black;
 
-  const Glyph.fromCharCode(this.char, [Color fore, Color back])
+  const Glyph.fromCharCode(this.char, [Color? fore, Color? back])
       : fore = fore != null ? fore : Color.white,
         back = back != null ? back : Color.black;
 
-  factory Glyph.fromDynamic(Object charOrCharCode, [Color fore, Color back]) {
+  factory Glyph.fromDynamic(Object charOrCharCode, [Color? fore, Color? back]) {
     if (charOrCharCode is String) return Glyph(charOrCharCode, fore, back);
     return Glyph.fromCharCode(charOrCharCode as int, fore, back);
   }

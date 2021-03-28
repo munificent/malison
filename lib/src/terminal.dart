@@ -27,8 +27,8 @@ abstract class Terminal {
   }
 
   /// Clears and fills the given rectangle with [color].
-  void fill(int x, int y, int width, int height, [Color color]) {
-    if (color == null) color = backColor;
+  void fill(int x, int y, int width, int height, [Color? color]) {
+    color ??= backColor;
 
     var glyph = Glyph.fromCharCode(CharCode.space, foreColor, color);
 
@@ -41,9 +41,9 @@ abstract class Terminal {
 
   /// Writes [text] starting at column [x], row [y] using [fore] as the text
   /// color and [back] as the background color.
-  void writeAt(int x, int y, String text, [Color fore, Color back]) {
-    if (fore == null) fore = foreColor;
-    if (back == null) back = backColor;
+  void writeAt(int x, int y, String text, [Color? fore, Color? back]) {
+    fore ??= foreColor;
+    back ??= backColor;
 
     // TODO: Bounds check.
     for (var i = 0; i < text.length; i++) {
@@ -59,7 +59,7 @@ abstract class Terminal {
 
   /// Writes a one-character string consisting of [charCode] at column [x],
   /// row [y] using [fore] as the text color and [back] as the background color.
-  void drawChar(int x, int y, int charCode, [Color fore, Color back]) {
+  void drawChar(int x, int y, int charCode, [Color? fore, Color? back]) {
     drawGlyph(x, y, Glyph.fromCharCode(charCode, fore, back));
   }
 

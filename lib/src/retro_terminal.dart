@@ -15,7 +15,6 @@ import 'unicode_map.dart';
 class RetroTerminal extends RenderableTerminal {
   final Display _display;
 
-  final html.CanvasElement _canvas;
   final html.CanvasRenderingContext2D _context;
   final html.ImageElement _font;
 
@@ -37,21 +36,22 @@ class RetroTerminal extends RenderableTerminal {
 
   /// Creates a new terminal using a built-in DOS-like font.
   factory RetroTerminal.dos(int width, int height,
-          [html.CanvasElement canvas]) =>
+          [html.CanvasElement? canvas]) =>
       RetroTerminal(width, height, "packages/malison/dos.png",
           canvas: canvas, charWidth: 9, charHeight: 16);
 
   /// Creates a new terminal using a short built-in DOS-like font.
   factory RetroTerminal.shortDos(int width, int height,
-          [html.CanvasElement canvas]) =>
+          [html.CanvasElement? canvas]) =>
       RetroTerminal(width, height, "packages/malison/dos-short.png",
           canvas: canvas, charWidth: 9, charHeight: 13);
 
   /// Creates a new terminal using a font image at [imageUrl].
   factory RetroTerminal(int width, int height, String imageUrl,
-      {html.CanvasElement canvas, int charWidth, int charHeight, int scale}) {
-    scale ??= html.window.devicePixelRatio.toInt();
-
+      {html.CanvasElement? canvas,
+      required int charWidth,
+      required int charHeight,
+      int? scale}) {
     // If not given a canvas, create one, automatically size it, and add it to
     // the page.
     if (canvas == null) {
@@ -65,7 +65,7 @@ class RetroTerminal extends RenderableTerminal {
       canvas.style.width = '${canvasWidth}px';
       canvas.style.height = '${canvasHeight}px';
 
-      html.document.body.append(canvas);
+      html.document.body!.append(canvas);
     } else {
       scale ??= 1;
     }
@@ -78,8 +78,7 @@ class RetroTerminal extends RenderableTerminal {
 
   RetroTerminal._(this._display, this._charWidth, this._charHeight,
       html.CanvasElement canvas, this._font, this._scale)
-      : _canvas = canvas,
-        _context = canvas.context2D {
+      : _context = canvas.context2D {
     _font.onLoad.listen((_) {
       _imageLoaded = true;
       render();
@@ -142,7 +141,7 @@ class RetroTerminal extends RenderableTerminal {
     // Tint it by filling in the existing alpha with the color.
     context.globalCompositeOperation = 'source-atop';
     context.fillStyle = color.cssColor;
-    context.fillRect(0, 0, _font.width, _font.height);
+    context.fillRect(0, 0, _font.width!, _font.height!);
 
     _fontColorCache[color] = tint;
     return tint;

@@ -38,14 +38,14 @@ class Display {
   final Array2D<Glyph> _glyphs;
 
   /// The glyphs that have been modified since the last call to [render].
-  final Array2D<Glyph> _changedGlyphs;
+  final Array2D<Glyph?> _changedGlyphs;
 
   int get width => _glyphs.width;
   int get height => _glyphs.height;
   Vec get size => _glyphs.size;
 
   Display(int width, int height)
-      : _glyphs = Array2D(width, height),
+      : _glyphs = Array2D(width, height, Glyph.clear),
         _changedGlyphs = Array2D(width, height, Glyph.clear);
 
   /// Sets the cell at [x], [y], to [glyph].

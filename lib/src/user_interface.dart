@@ -19,11 +19,11 @@ class UserInterface<T> {
   final keyPress = KeyBindings<T>();
 
   final List<Screen<T>> _screens = [];
-  RenderableTerminal _terminal;
+  RenderableTerminal? _terminal;
   bool _dirty = true;
 
-  StreamSubscription<html.KeyboardEvent> _keyDownSubscription;
-  StreamSubscription<html.KeyboardEvent> _keyUpSubscription;
+  StreamSubscription<html.KeyboardEvent>? _keyDownSubscription;
+  StreamSubscription<html.KeyboardEvent>? _keyUpSubscription;
 
   /// Whether or not the UI is listening for keyboard events.
   ///
@@ -34,13 +34,13 @@ class UserInterface<T> {
     if (value == handlingInput) return;
 
     if (value) {
-      _keyDownSubscription = html.document.body.onKeyDown.listen(_keyDown);
-      _keyUpSubscription = html.document.body.onKeyUp.listen(_keyUp);
+      _keyDownSubscription = html.document.body!.onKeyDown.listen(_keyDown);
+      _keyUpSubscription = html.document.body!.onKeyUp.listen(_keyUp);
     } else {
-      _keyDownSubscription.cancel();
+      _keyDownSubscription?.cancel();
       _keyDownSubscription = null;
 
-      _keyUpSubscription.cancel();
+      _keyUpSubscription?.cancel();
       _keyUpSubscription = null;
     }
   }
@@ -70,8 +70,8 @@ class UserInterface<T> {
   void setTerminal(RenderableTerminal terminal) {
     var resized = terminal != null &&
         (_terminal == null ||
-            _terminal.width != terminal.width ||
-            _terminal.height != terminal.height);
+            _terminal!.width != terminal.width ||
+            _terminal!.height != terminal.height);
 
     _terminal = terminal;
     dirty();
@@ -93,7 +93,7 @@ class UserInterface<T> {
   ///
   /// The next screen down is activated. If [result] is given, it is passed to
   /// the new active screen's [activate] method.
-  void pop([Object result]) {
+  void pop([Object? result]) {
     var screen = _screens.removeLast();
     screen._unbind();
     _screens[_screens.length - 1].activate(screen, result);
@@ -209,10 +209,11 @@ class UserInterface<T> {
   }
 
   void _render() {
-    // If the UI isn't currentl bound to a terminal, there's nothing to render.
-    if (_terminal == null) return;
+    // If the UI isn't currently bound to a terminal, there's nothing to render.
+    var terminal = _terminal;
+    if (terminal == null) return;
 
-    _terminal.clear();
+    terminal.clear();
 
     // Skip past all of the covered screens.
     int i;
@@ -224,19 +225,19 @@ class UserInterface<T> {
 
     // Render the top opaque screen and any transparent ones above it.
     for (; i < _screens.length; i++) {
-      _screens[i].render(_terminal);
+      _screens[i].render(terminal);
     }
 
     _dirty = false;
-    _terminal.render();
+    terminal.render();
   }
 }
 
 class Screen<T> {
-  UserInterface<T> _ui;
+  UserInterface<T>? _ui;
 
   /// The [UserInterface] this screen is bound to.
-  UserInterface<T> get ui => _ui;
+  UserInterface<T>? get ui => _ui;
 
   /// Whether this screen allows any screens under it to be visible.
   ///
@@ -248,7 +249,7 @@ class Screen<T> {
     assert(_ui == null);
     _ui = ui;
 
-    resize(ui._terminal.size);
+    resize(ui._terminal!.size);
   }
 
   /// Unbinds this screen from the [ui] that owns it.
@@ -266,7 +267,7 @@ class Screen<T> {
     // when it gets bound.
     if (_ui == null) return;
 
-    _ui.dirty();
+    _ui!.dirty();
   }
 
   /// If a keypress has a binding defined for it and is pressed, this will be
@@ -276,14 +277,14 @@ class Screen<T> {
   /// method will be called.
   bool handleInput(T input) => false;
 
-  bool keyDown(int keyCode, {bool shift, bool alt}) => false;
+  bool keyDown(int keyCode, {required bool shift, required bool alt}) => false;
 
-  bool keyUp(int keyCode, {bool shift, bool alt}) => false;
+  bool keyUp(int keyCode, {required bool shift, required bool alt}) => false;
 
   /// Called when the screen above this one ([popped]) has been popped and this
   /// screen is now the top-most screen. If a value was passed to [pop()], it
   /// will be passed to this as [result].
-  void activate(Screen<T> popped, Object result) {}
+  void activate(Screen<T> popped, Object? result) {}
 
   void update() {}
 

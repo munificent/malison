@@ -23,13 +23,13 @@ class CanvasTerminal extends RenderableTerminal {
   int get height => _display.height;
 
   factory CanvasTerminal(int width, int height, Font font,
-      [html.CanvasElement canvas]) {
+      [html.CanvasElement? canvas]) {
     var display = Display(width, height);
 
     // If not given a canvas, create one and add it to the page.
     if (canvas == null) {
       canvas = html.CanvasElement();
-      html.document.body.append(canvas);
+      html.document.body!.append(canvas);
     }
 
     return CanvasTerminal._(display, font, canvas);
@@ -89,7 +89,12 @@ class Font {
   final int x;
   final int y;
 
-  Font(this.family, {this.size, int w, int h, this.x, this.y})
+  Font(this.family,
+      {required this.size,
+      required int w,
+      required int h,
+      required this.x,
+      required this.y})
       : charWidth = w,
         lineHeight = h;
 }
