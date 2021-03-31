@@ -1,3 +1,7 @@
+## 0.13.0
+
+* Make `Screen.ui` non-nullable and throw if the screen is not bound to a UI.
+
 ## 0.12.0
 
 * Migrate to null safety.

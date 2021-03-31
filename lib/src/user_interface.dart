@@ -237,7 +237,14 @@ class Screen<T> {
   UserInterface<T>? _ui;
 
   /// The [UserInterface] this screen is bound to.
-  UserInterface<T>? get ui => _ui;
+  ///
+  /// Throws an exception if the screen is not currently bound to an interface.
+  UserInterface<T> get ui => _ui!;
+
+  /// Whether this screen is bound to a [UserInterface].
+  ///
+  /// If this is `false`, then [ui] cannot be accessed.
+  bool get isBound => _ui != null;
 
   /// Whether this screen allows any screens under it to be visible.
   ///

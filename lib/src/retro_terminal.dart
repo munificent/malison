@@ -52,11 +52,11 @@ class RetroTerminal extends RenderableTerminal {
       required int charWidth,
       required int charHeight,
       int? scale}) {
+    scale ??= html.window.devicePixelRatio.toInt();
+
     // If not given a canvas, create one, automatically size it, and add it to
     // the page.
     if (canvas == null) {
-      scale ??= html.window.devicePixelRatio.toInt();
-
       canvas = html.CanvasElement();
       var canvasWidth = charWidth * width;
       var canvasHeight = charHeight * height;
@@ -66,8 +66,6 @@ class RetroTerminal extends RenderableTerminal {
       canvas.style.height = '${canvasHeight}px';
 
       html.document.body!.append(canvas);
-    } else {
-      scale ??= 1;
     }
 
     var display = Display(width, height);
