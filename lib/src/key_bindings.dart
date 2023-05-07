@@ -29,13 +29,10 @@ class _KeyBinding {
 
   @override
   bool operator ==(Object other) {
-    if (other is _KeyBinding) {
-      return charCode == other.charCode &&
-          shift == other.shift &&
-          alt == other.alt;
-    }
-
-    return false;
+    return other is _KeyBinding &&
+        charCode == other.charCode &&
+        shift == other.shift &&
+        alt == other.alt;
   }
 
   @override

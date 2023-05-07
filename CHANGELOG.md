@@ -1,3 +1,7 @@
+## 0.13.1
+
+* Migrate to Dart 3.0.
+
 ## 0.13.0
 
 * Make `Screen.ui` non-nullable and throw if the screen is not bound to a UI.

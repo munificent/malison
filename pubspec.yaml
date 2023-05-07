@@ -1,5 +1,5 @@
 name: malison
-version: 0.13.1-dev
+version: 0.13.1
 description: A little terminal UI package for the browser.
 homepage: https://github.com/munificent/malison
 dependencies:

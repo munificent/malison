@@ -56,13 +56,8 @@ class Color {
   int get hashCode => r.hashCode ^ g.hashCode ^ b.hashCode;
 
   @override
-  bool operator ==(Object other) {
-    if (other is Color) {
-      return r == other.r && g == other.g && b == other.b;
-    }
-
-    return false;
-  }
+  bool operator ==(Object other) =>
+      other is Color && r == other.r && g == other.g && b == other.b;
 
   Color add(Color other, [double? fractionOther]) {
     fractionOther ??= 1.0;
@@ -86,7 +81,7 @@ class Color {
 
 class Glyph {
   /// The empty glyph: a clear glyph using the default background color
-  /// [Color.BLACK].
+  /// [Color.black].
   static const clear = Glyph.fromCharCode(CharCode.space);
 
   final int char;

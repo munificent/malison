@@ -9,7 +9,7 @@ typedef RenderGlyph = void Function(int x, int y, Glyph glyph);
 ///
 /// Drawing a glyph on screen is the most expensive operation a terminal
 /// performs, so we want to avoid doing that when not necessary. The simplest
-/// solution is to render the glyphs that are drawn when terminal draw call is
+/// solution is to render the glyphs that are drawn when a terminal draw call is
 /// made. However, it's common for a given terminal cell to be drawn multiple
 /// times between updates. Often, the final result is the same as what was
 /// previously on screen.

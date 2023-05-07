@@ -133,32 +133,21 @@ class UserInterface<T> {
 
     // If the keypress happened on the numpad, translate the keyCode.
     if (event.location == 3) {
-      switch (keyCode) {
-        case KeyCode.zero:
-          keyCode = KeyCode.numpad0;
-        case KeyCode.one:
-          keyCode = KeyCode.numpad1;
-        case KeyCode.two:
-          keyCode = KeyCode.numpad2;
-        case KeyCode.three:
-          keyCode = KeyCode.numpad3;
-        case KeyCode.four:
-          keyCode = KeyCode.numpad4;
-        case KeyCode.five:
-          keyCode = KeyCode.numpad5;
-        case KeyCode.six:
-          keyCode = KeyCode.numpad6;
-        case KeyCode.seven:
-          keyCode = KeyCode.numpad7;
-        case KeyCode.eight:
-          keyCode = KeyCode.numpad8;
-        case KeyCode.nine:
-          keyCode = KeyCode.numpad9;
-        case KeyCode.equals:
-          keyCode = KeyCode.numpadEquals;
-        case KeyCode.enter:
-          keyCode = KeyCode.numpadEnter;
-      }
+      keyCode = switch (keyCode) {
+        KeyCode.zero => KeyCode.numpad0,
+        KeyCode.one => KeyCode.numpad1,
+        KeyCode.two => KeyCode.numpad2,
+        KeyCode.three => KeyCode.numpad3,
+        KeyCode.four => KeyCode.numpad4,
+        KeyCode.five => KeyCode.numpad5,
+        KeyCode.six => KeyCode.numpad6,
+        KeyCode.seven => KeyCode.numpad7,
+        KeyCode.eight => KeyCode.numpad8,
+        KeyCode.nine => KeyCode.numpad9,
+        KeyCode.equals => KeyCode.numpadEquals,
+        KeyCode.enter => KeyCode.numpadEnter,
+        _ => keyCode
+      };
     }
 
     // Firefox uses 59 for semicolon.
