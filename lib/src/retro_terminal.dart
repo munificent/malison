@@ -3,8 +3,8 @@ import 'dart:html' as html;
 import 'package:piecemeal/piecemeal.dart';
 
 import 'char_code.dart';
-import 'glyph.dart';
 import 'display.dart';
+import 'glyph.dart';
 import 'terminal.dart';
 import 'unicode_map.dart';
 
@@ -30,8 +30,11 @@ class RetroTerminal extends RenderableTerminal {
   final int _charWidth;
   final int _charHeight;
 
+  @override
   int get width => _display.width;
+  @override
   int get height => _display.height;
+  @override
   Vec get size => _display.size;
 
   /// Creates a new terminal using a built-in DOS-like font.
@@ -83,10 +86,12 @@ class RetroTerminal extends RenderableTerminal {
     });
   }
 
+  @override
   void drawGlyph(int x, int y, Glyph glyph) {
     _display.setGlyph(x, y, glyph);
   }
 
+  @override
   void render() {
     if (!_imageLoaded) return;
 
@@ -122,6 +127,7 @@ class RetroTerminal extends RenderableTerminal {
     });
   }
 
+  @override
   Vec pixelToChar(Vec pixel) =>
       Vec(pixel.x ~/ _charWidth, pixel.y ~/ _charHeight);
 

@@ -67,7 +67,7 @@ class UserInterface<T> {
 
   UserInterface([this._terminal]);
 
-  void setTerminal(RenderableTerminal terminal) {
+  void setTerminal(RenderableTerminal? terminal) {
     var resized = terminal != null &&
         (_terminal == null ||
             _terminal!.width != terminal.width ||
@@ -78,7 +78,9 @@ class UserInterface<T> {
 
     // If the terminal size changed, let the screens known.
     if (resized) {
-      for (var screen in _screens) screen.resize(terminal.size);
+      for (var screen in _screens) {
+        screen.resize(terminal.size);
+      }
     }
   }
 
@@ -134,40 +136,28 @@ class UserInterface<T> {
       switch (keyCode) {
         case KeyCode.zero:
           keyCode = KeyCode.numpad0;
-          break;
         case KeyCode.one:
           keyCode = KeyCode.numpad1;
-          break;
         case KeyCode.two:
           keyCode = KeyCode.numpad2;
-          break;
         case KeyCode.three:
           keyCode = KeyCode.numpad3;
-          break;
         case KeyCode.four:
           keyCode = KeyCode.numpad4;
-          break;
         case KeyCode.five:
           keyCode = KeyCode.numpad5;
-          break;
         case KeyCode.six:
           keyCode = KeyCode.numpad6;
-          break;
         case KeyCode.seven:
           keyCode = KeyCode.numpad7;
-          break;
         case KeyCode.eight:
           keyCode = KeyCode.numpad8;
-          break;
         case KeyCode.nine:
           keyCode = KeyCode.numpad9;
-          break;
         case KeyCode.equals:
           keyCode = KeyCode.numpadEquals;
-          break;
         case KeyCode.enter:
           keyCode = KeyCode.numpadEnter;
-          break;
       }
     }
 

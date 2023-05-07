@@ -45,3 +45,14 @@ void main() {
   terminal.render();
 }
 ```
+
+## Example
+
+The repo includes a little example web application so you can see it in action.
+From the root of repo, run:
+
+```sh
+$ dart run build_runner serve
+```
+
+Then in your browser of choice, navigate to `http://localhost:8080`.

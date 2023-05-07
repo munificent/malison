@@ -3,8 +3,8 @@ import 'dart:html' as html;
 import 'package:piecemeal/piecemeal.dart';
 
 import 'char_code.dart';
-import 'glyph.dart';
 import 'display.dart';
+import 'glyph.dart';
 import 'terminal.dart';
 
 /// A [RenderableTerminal] that draws to a canvas element using a browser font.
@@ -18,8 +18,11 @@ class CanvasTerminal extends RenderableTerminal {
   /// The drawing scale, used to adapt to Retina displays.
   final int _scale = html.window.devicePixelRatio.toInt();
 
+  @override
   Vec get size => _display.size;
+  @override
   int get width => _display.width;
+  @override
   int get height => _display.height;
 
   factory CanvasTerminal(int width, int height, Font font,
@@ -47,10 +50,12 @@ class CanvasTerminal extends RenderableTerminal {
     _canvas.style.height = '${canvasHeight}px';
   }
 
+  @override
   void drawGlyph(int x, int y, Glyph glyph) {
     _display.setGlyph(x, y, glyph);
   }
 
+  @override
   void render() {
     _context.font = '${_font.size * _scale}px ${_font.family}, monospace';
 
@@ -76,6 +81,7 @@ class CanvasTerminal extends RenderableTerminal {
     });
   }
 
+  @override
   Vec pixelToChar(Vec pixel) =>
       Vec(pixel.x ~/ _font.charWidth, pixel.y ~/ _font.lineHeight);
 }
