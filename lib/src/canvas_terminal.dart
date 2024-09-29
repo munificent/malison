@@ -18,8 +18,13 @@ class CanvasTerminal extends RenderableTerminal {
   /// The drawing scale, used to adapt to Retina displays.
   final int _scale = html.window.devicePixelRatio.toInt();
 
+  @override
   Vec get size => _display.size;
+
+  @override
   int get width => _display.width;
+
+  @override
   int get height => _display.height;
 
   factory CanvasTerminal(int width, int height, Font font,
@@ -35,9 +40,8 @@ class CanvasTerminal extends RenderableTerminal {
     return CanvasTerminal._(display, font, canvas);
   }
 
-  CanvasTerminal._(this._display, this._font, html.CanvasElement canvas)
-      : _canvas = canvas,
-        _context = canvas.context2D {
+  CanvasTerminal._(this._display, this._font, this._canvas)
+      : _context = _canvas.context2D {
     // Handle high-resolution (i.e. retina) displays.
     var canvasWidth = _font.charWidth * _display.width;
     var canvasHeight = _font.lineHeight * _display.height;
@@ -47,10 +51,12 @@ class CanvasTerminal extends RenderableTerminal {
     _canvas.style.height = '${canvasHeight}px';
   }
 
+  @override
   void drawGlyph(int x, int y, Glyph glyph) {
     _display.setGlyph(x, y, glyph);
   }
 
+  @override
   void render() {
     _context.font = '${_font.size * _scale}px ${_font.family}, monospace';
 
@@ -76,6 +82,7 @@ class CanvasTerminal extends RenderableTerminal {
     });
   }
 
+  @override
   Vec pixelToChar(Vec pixel) =>
       Vec(pixel.x ~/ _font.charWidth, pixel.y ~/ _font.lineHeight);
 }

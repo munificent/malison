@@ -76,35 +76,30 @@ class MainScreen extends Screen<String> {
     }
   }
 
+  @override
   bool handleInput(String input) {
     switch (input) {
       case "next terminal":
         terminalIndex = (terminalIndex + 1) % terminals.length;
         updateTerminal();
         ui.refresh();
-        break;
 
       case "prev terminal":
         terminalIndex = (terminalIndex - 1) % terminals.length;
         updateTerminal();
         ui.refresh();
-        break;
 
       case "animate":
         ui.running = !ui.running;
-        break;
 
       case "profile":
         profile();
-        break;
 
       case "fps up":
         ui.framesPerSecond++;
-        break;
 
       case "fps down":
         ui.framesPerSecond--;
-        break;
 
       default:
         return false;
@@ -121,6 +116,7 @@ class MainScreen extends Screen<String> {
     }
   }
 
+  @override
   void update() {
     for (var ball in balls) {
       ball.update();
@@ -129,6 +125,7 @@ class MainScreen extends Screen<String> {
     dirty();
   }
 
+  @override
   void render(Terminal terminal) {
     terminal.clear();
 

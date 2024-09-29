@@ -91,7 +91,9 @@ class UserInterface<T> {
 
     // If the terminal size changed, let the screens known.
     if (resized) {
-      for (var screen in _screens) screen.resize(terminal.size);
+      for (var screen in _screens) {
+        screen.resize(terminal.size);
+      }
     }
   }
 
@@ -144,44 +146,21 @@ class UserInterface<T> {
 
     // If the keypress happened on the numpad, translate the keyCode.
     if (event.location == 3) {
-      switch (keyCode) {
-        case KeyCode.zero:
-          keyCode = KeyCode.numpad0;
-          break;
-        case KeyCode.one:
-          keyCode = KeyCode.numpad1;
-          break;
-        case KeyCode.two:
-          keyCode = KeyCode.numpad2;
-          break;
-        case KeyCode.three:
-          keyCode = KeyCode.numpad3;
-          break;
-        case KeyCode.four:
-          keyCode = KeyCode.numpad4;
-          break;
-        case KeyCode.five:
-          keyCode = KeyCode.numpad5;
-          break;
-        case KeyCode.six:
-          keyCode = KeyCode.numpad6;
-          break;
-        case KeyCode.seven:
-          keyCode = KeyCode.numpad7;
-          break;
-        case KeyCode.eight:
-          keyCode = KeyCode.numpad8;
-          break;
-        case KeyCode.nine:
-          keyCode = KeyCode.numpad9;
-          break;
-        case KeyCode.equals:
-          keyCode = KeyCode.numpadEquals;
-          break;
-        case KeyCode.enter:
-          keyCode = KeyCode.numpadEnter;
-          break;
-      }
+      keyCode = switch (keyCode) {
+        KeyCode.zero => KeyCode.numpad0,
+        KeyCode.one => KeyCode.numpad1,
+        KeyCode.two => KeyCode.numpad2,
+        KeyCode.three => KeyCode.numpad3,
+        KeyCode.four => KeyCode.numpad4,
+        KeyCode.five => KeyCode.numpad5,
+        KeyCode.six => KeyCode.numpad6,
+        KeyCode.seven => KeyCode.numpad7,
+        KeyCode.eight => KeyCode.numpad8,
+        KeyCode.nine => KeyCode.numpad9,
+        KeyCode.equals => KeyCode.numpadEquals,
+        KeyCode.enter => KeyCode.numpadEnter,
+        _ => keyCode,
+      };
     }
 
     // Firefox uses 59 for semicolon.

@@ -2,7 +2,7 @@ import 'package:piecemeal/piecemeal.dart';
 
 import 'glyph.dart';
 
-typedef void RenderGlyph(int x, int y, Glyph glyph);
+typedef RenderGlyph = void Function(int x, int y, Glyph glyph);
 
 /// The "backing store" that a renderable terminal uses to tell which glyphs
 /// actually need rendering.

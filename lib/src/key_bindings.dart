@@ -1,7 +1,7 @@
 class KeyBindings<T> {
   /// The high-level inputs and the low level keyboard bindings that are mapped
   /// to them.
-  final _bindings = Map<_KeyBinding, T>();
+  final _bindings = <_KeyBinding, T>{};
 
   void bind(T input, int keyCode, {bool shift = false, bool alt = false}) {
     _bindings[_KeyBinding(keyCode, shift: shift, alt: alt)] = input;
@@ -27,6 +27,7 @@ class _KeyBinding {
 
   _KeyBinding(this.charCode, {required this.shift, required this.alt});
 
+  @override
   bool operator ==(Object other) {
     if (other is _KeyBinding) {
       return charCode == other.charCode &&
@@ -37,13 +38,16 @@ class _KeyBinding {
     return false;
   }
 
+  @override
   int get hashCode => charCode.hashCode ^ shift.hashCode ^ alt.hashCode;
 
+  @override
   String toString() {
     var result = "key($charCode";
     if (shift) result += " shift";
     if (alt) result += " alt";
-    return result + ")";
+    result += ")";
+    return result;
   }
 }
 

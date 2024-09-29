@@ -52,8 +52,10 @@ class Color {
 
   const Color(this.r, this.g, this.b);
 
+  @override
   int get hashCode => r.hashCode ^ g.hashCode ^ b.hashCode;
 
+  @override
   bool operator ==(Object other) {
     if (other is Color) {
       return r == other.r && g == other.g && b == other.b;
@@ -93,20 +95,22 @@ class Glyph {
 
   Glyph(String char, [Color? fore, Color? back])
       : char = char.codeUnits[0],
-        fore = fore != null ? fore : Color.white,
-        back = back != null ? back : Color.black;
+        fore = fore ?? Color.white,
+        back = back ?? Color.black;
 
   const Glyph.fromCharCode(this.char, [Color? fore, Color? back])
-      : fore = fore != null ? fore : Color.white,
-        back = back != null ? back : Color.black;
+      : fore = fore ?? Color.white,
+        back = back ?? Color.black;
 
   factory Glyph.fromDynamic(Object charOrCharCode, [Color? fore, Color? back]) {
     if (charOrCharCode is String) return Glyph(charOrCharCode, fore, back);
     return Glyph.fromCharCode(charOrCharCode as int, fore, back);
   }
 
+  @override
   int get hashCode => char.hashCode ^ fore.hashCode ^ back.hashCode;
 
+  @override
   operator ==(Object other) {
     if (other is Glyph) {
       return char == other.char && fore == other.fore && back == other.back;
