@@ -30,6 +30,8 @@ void main() {
   ui.keyPress.bind("prev terminal", KeyCode.tab, shift: true);
   ui.keyPress.bind("animate", KeyCode.space);
   ui.keyPress.bind("profile", KeyCode.p);
+  ui.keyPress.bind("fps up", KeyCode.up);
+  ui.keyPress.bind("fps down", KeyCode.down);
 
   updateTerminal();
 
@@ -94,6 +96,14 @@ class MainScreen extends Screen<String> {
 
       case "profile":
         profile();
+        break;
+
+      case "fps up":
+        ui.framesPerSecond++;
+        break;
+
+      case "fps down":
+        ui.framesPerSecond--;
         break;
 
       default:
@@ -173,6 +183,8 @@ class MainScreen extends Screen<String> {
     }
 
     terminal.writeAt(22, 12, "Simple game loop:");
+    terminal.writeAt(50, 12, "FPS:");
+    terminal.writeAt(55, 12, ui.framesPerSecond.toString());
     terminal.writeAt(66, 12, "toggle [space]", Color.darkGray);
     terminal.writeAt(73, 12, "[space]", Color.lightGray);
 

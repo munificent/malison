@@ -1,3 +1,9 @@
+## 0.13.1
+
+* Use a frame rate to control how often refresh() is called. Set
+  `UI.framesPerSecond` to control the rate. It defaults to 60, instead of
+  running as fast as possible as it did before.
+
 ## 0.13.0
 
 * Make `Screen.ui` non-nullable and throw if the screen is not bound to a UI.
