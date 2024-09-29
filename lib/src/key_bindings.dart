@@ -43,7 +43,8 @@ class _KeyBinding {
     var result = "key($charCode";
     if (shift) result += " shift";
     if (alt) result += " alt";
-    return "$result)";
+    result += ")";
+    return result;
   }
 }
 

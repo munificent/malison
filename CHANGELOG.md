@@ -1,3 +1,9 @@
+## 0.13.2
+
+* Use a frame rate to control how often refresh() is called. Set
+  `UI.framesPerSecond` to control the rate. It defaults to 60, instead of
+  running as fast as possible as it did before.
+
 ## 0.13.1
 
 * Migrate to Dart 3.0.

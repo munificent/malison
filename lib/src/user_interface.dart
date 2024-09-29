@@ -56,22 +56,35 @@ class UserInterface<T> {
   bool get running => _running;
   bool _running = false;
 
+  /// The rate that [refresh()] should ideally be called at when [running] is
+  /// `true`.
+  int framesPerSecond = 60;
+
+  /// The time of the last [requestAnimationFrame] call that led to a
+  /// [refresh()].
+  ///
+  /// We use this to control the frame rate. A new [refresh()] call only occurs
+  /// after the current time is larger than the frame time.
+  num? _lastRefreshTime;
+
   set running(bool value) {
     if (value == _running) return;
 
     _running = value;
     if (_running) {
+      // Reset the start time so that we refresh immediately.
+      _lastRefreshTime = null;
+
       html.window.requestAnimationFrame(_tick);
     }
   }
 
   UserInterface([this._terminal]);
 
-  void setTerminal(RenderableTerminal? terminal) {
-    var resized = terminal != null &&
-        (_terminal == null ||
-            _terminal!.width != terminal.width ||
-            _terminal!.height != terminal.height);
+  void setTerminal(RenderableTerminal terminal) {
+    var resized = _terminal == null ||
+        _terminal!.width != terminal.width ||
+        _terminal!.height != terminal.height;
 
     _terminal = terminal;
     dirty();
@@ -146,7 +159,7 @@ class UserInterface<T> {
         KeyCode.nine => KeyCode.numpad9,
         KeyCode.equals => KeyCode.numpadEquals,
         KeyCode.enter => KeyCode.numpadEnter,
-        _ => keyCode
+        _ => keyCode,
       };
     }
 
@@ -182,7 +195,17 @@ class UserInterface<T> {
 
   /// Called every animation frame while the UI's game loop is running.
   void _tick(num time) {
-    refresh();
+    if (_lastRefreshTime case var start?) {
+      // If more than a frame's time has passed, it's time to refresh.
+      if (time - start > 1000 / framesPerSecond) {
+        refresh();
+        _lastRefreshTime = time;
+      }
+    } else {
+      // Always refresh the first frame.
+      refresh();
+      _lastRefreshTime = time;
+    }
 
     if (_running) html.window.requestAnimationFrame(_tick);
   }

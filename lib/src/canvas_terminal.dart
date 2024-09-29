@@ -20,8 +20,10 @@ class CanvasTerminal extends RenderableTerminal {
 
   @override
   Vec get size => _display.size;
+
   @override
   int get width => _display.width;
+
   @override
   int get height => _display.height;
 
@@ -38,9 +40,8 @@ class CanvasTerminal extends RenderableTerminal {
     return CanvasTerminal._(display, font, canvas);
   }
 
-  CanvasTerminal._(this._display, this._font, html.CanvasElement canvas)
-      : _canvas = canvas,
-        _context = canvas.context2D {
+  CanvasTerminal._(this._display, this._font, this._canvas)
+      : _context = _canvas.context2D {
     // Handle high-resolution (i.e. retina) displays.
     var canvasWidth = _font.charWidth * _display.width;
     var canvasHeight = _font.lineHeight * _display.height;

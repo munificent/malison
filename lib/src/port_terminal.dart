@@ -7,8 +7,10 @@ import 'terminal.dart';
 class PortTerminal extends Terminal {
   @override
   int get width => size.x;
+
   @override
   int get height => size.y;
+
   @override
   final Vec size;
 

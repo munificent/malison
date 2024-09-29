@@ -32,8 +32,10 @@ class RetroTerminal extends RenderableTerminal {
 
   @override
   int get width => _display.width;
+
   @override
   int get height => _display.height;
+
   @override
   Vec get size => _display.size;
 

@@ -1,5 +1,5 @@
 name: malison
-version: 0.13.1
+version: 0.13.2
 description: A little terminal UI package for the browser.
 homepage: https://github.com/munificent/malison
 dependencies:
@@ -7,6 +7,6 @@ dependencies:
 dev_dependencies:
   build_runner: any
   build_web_compilers: any
-  lints: any
+  lints: "^2.1.1"
 environment:
-  sdk: "^3.0.0"
+  sdk: "^3.5.0"
