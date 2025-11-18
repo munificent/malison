@@ -1,3 +1,7 @@
+## 0.14.0
+
+* Move off deprecated `dart:html` onto `package:web`.
+
 ## 0.13.2
 
 * Use a frame rate to control how often refresh() is called. Set

@@ -1,6 +1,7 @@
-import 'dart:html' as html;
+import 'dart:js_interop';
 
 import 'package:piecemeal/piecemeal.dart';
+import 'package:web/web.dart' as web;
 
 import 'char_code.dart';
 import 'display.dart';
@@ -12,11 +13,11 @@ class CanvasTerminal extends RenderableTerminal {
   final Display _display;
 
   final Font _font;
-  final html.CanvasElement _canvas;
-  final html.CanvasRenderingContext2D _context;
+  final web.HTMLCanvasElement _canvas;
+  final web.CanvasRenderingContext2D _context;
 
   /// The drawing scale, used to adapt to Retina displays.
-  final int _scale = html.window.devicePixelRatio.toInt();
+  final int _scale = web.window.devicePixelRatio.toInt();
 
   @override
   Vec get size => _display.size;
@@ -27,21 +28,25 @@ class CanvasTerminal extends RenderableTerminal {
   @override
   int get height => _display.height;
 
-  factory CanvasTerminal(int width, int height, Font font,
-      [html.CanvasElement? canvas]) {
+  factory CanvasTerminal(
+    int width,
+    int height,
+    Font font, [
+    web.HTMLCanvasElement? canvas,
+  ]) {
     var display = Display(width, height);
 
     // If not given a canvas, create one and add it to the page.
     if (canvas == null) {
-      canvas = html.CanvasElement();
-      html.document.body!.append(canvas);
+      canvas = web.HTMLCanvasElement();
+      web.document.body!.append(canvas);
     }
 
     return CanvasTerminal._(display, font, canvas);
   }
 
   CanvasTerminal._(this._display, this._font, this._canvas)
-      : _context = _canvas.context2D {
+    : _context = _canvas.context2D {
     // Handle high-resolution (i.e. retina) displays.
     var canvasWidth = _font.charWidth * _display.width;
     var canvasHeight = _font.lineHeight * _display.height;
@@ -64,21 +69,23 @@ class CanvasTerminal extends RenderableTerminal {
       var char = glyph.char;
 
       // Fill the background.
-      _context.fillStyle = glyph.back.cssColor;
+      _context.fillStyle = glyph.back.cssColor.toJS;
       _context.fillRect(
-          x * _font.charWidth * _scale,
-          y * _font.lineHeight * _scale,
-          _font.charWidth * _scale,
-          _font.lineHeight * _scale);
+        x * _font.charWidth * _scale,
+        y * _font.lineHeight * _scale,
+        _font.charWidth * _scale,
+        _font.lineHeight * _scale,
+      );
 
       // Don't bother drawing empty characters.
       if (char == 0 || char == CharCode.space) return;
 
-      _context.fillStyle = glyph.fore.cssColor;
+      _context.fillStyle = glyph.fore.cssColor.toJS;
       _context.fillText(
-          String.fromCharCodes([char]),
-          (x * _font.charWidth + _font.x) * _scale,
-          (y * _font.lineHeight + _font.y) * _scale);
+        String.fromCharCodes([char]),
+        (x * _font.charWidth + _font.x) * _scale,
+        (y * _font.lineHeight + _font.y) * _scale,
+      );
     });
   }
 
@@ -96,12 +103,13 @@ class Font {
   final int x;
   final int y;
 
-  Font(this.family,
-      {required this.size,
-      required int w,
-      required int h,
-      required this.x,
-      required this.y})
-      : charWidth = w,
-        lineHeight = h;
+  Font(
+    this.family, {
+    required this.size,
+    required int w,
+    required int h,
+    required this.x,
+    required this.y,
+  }) : charWidth = w,
+       lineHeight = h;
 }

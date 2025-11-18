@@ -1,6 +1,7 @@
-import 'dart:html' as html;
+import 'dart:js_interop';
 
 import 'package:piecemeal/piecemeal.dart';
+import 'package:web/web.dart' as web;
 
 import 'char_code.dart';
 import 'display.dart';
@@ -15,12 +16,12 @@ import 'unicode_map.dart';
 class RetroTerminal extends RenderableTerminal {
   final Display _display;
 
-  final html.CanvasRenderingContext2D _context;
-  final html.ImageElement _font;
+  final web.CanvasRenderingContext2D _context;
+  final web.HTMLImageElement _font;
 
   /// A cache of the tinted font images. Each key is a color, and the image
   /// will is the font in that color.
-  final Map<Color, html.CanvasElement> _fontColorCache = {};
+  final Map<Color, web.HTMLCanvasElement> _fontColorCache = {};
 
   /// The drawing scale, used to adapt to Retina displays.
   final int _scale;
@@ -40,29 +41,49 @@ class RetroTerminal extends RenderableTerminal {
   Vec get size => _display.size;
 
   /// Creates a new terminal using a built-in DOS-like font.
-  factory RetroTerminal.dos(int width, int height,
-          [html.CanvasElement? canvas]) =>
-      RetroTerminal(width, height, "packages/malison/dos.png",
-          canvas: canvas, charWidth: 9, charHeight: 16);
+  factory RetroTerminal.dos(
+    int width,
+    int height, [
+    web.HTMLCanvasElement? canvas,
+  ]) => RetroTerminal(
+    width,
+    height,
+    "packages/malison/dos.png",
+    canvas: canvas,
+    charWidth: 9,
+    charHeight: 16,
+  );
 
   /// Creates a new terminal using a short built-in DOS-like font.
-  factory RetroTerminal.shortDos(int width, int height,
-          [html.CanvasElement? canvas]) =>
-      RetroTerminal(width, height, "packages/malison/dos-short.png",
-          canvas: canvas, charWidth: 9, charHeight: 13);
+  factory RetroTerminal.shortDos(
+    int width,
+    int height, [
+    web.HTMLCanvasElement? canvas,
+  ]) => RetroTerminal(
+    width,
+    height,
+    "packages/malison/dos-short.png",
+    canvas: canvas,
+    charWidth: 9,
+    charHeight: 13,
+  );
 
   /// Creates a new terminal using a font image at [imageUrl].
-  factory RetroTerminal(int width, int height, String imageUrl,
-      {html.CanvasElement? canvas,
-      required int charWidth,
-      required int charHeight,
-      int? scale}) {
-    scale ??= html.window.devicePixelRatio.toInt();
+  factory RetroTerminal(
+    int width,
+    int height,
+    String imageUrl, {
+    web.HTMLCanvasElement? canvas,
+    required int charWidth,
+    required int charHeight,
+    int? scale,
+  }) {
+    scale ??= web.window.devicePixelRatio.toInt();
 
     // If not given a canvas, create one, automatically size it, and add it to
     // the page.
     if (canvas == null) {
-      canvas = html.CanvasElement();
+      canvas = web.HTMLCanvasElement();
       var canvasWidth = charWidth * width;
       var canvasHeight = charHeight * height;
       canvas.width = canvasWidth * scale;
@@ -70,18 +91,32 @@ class RetroTerminal extends RenderableTerminal {
       canvas.style.width = '${canvasWidth}px';
       canvas.style.height = '${canvasHeight}px';
 
-      html.document.body!.append(canvas);
+      web.document.body!.append(canvas);
     }
 
     var display = Display(width, height);
 
-    return RetroTerminal._(display, charWidth, charHeight, canvas,
-        html.ImageElement(src: imageUrl), scale);
+    var image = web.HTMLImageElement();
+    image.src = imageUrl;
+
+    return RetroTerminal._(
+      display,
+      charWidth,
+      charHeight,
+      canvas,
+      image,
+      scale,
+    );
   }
 
-  RetroTerminal._(this._display, this._charWidth, this._charHeight,
-      html.CanvasElement canvas, this._font, this._scale)
-      : _context = canvas.context2D {
+  RetroTerminal._(
+    this._display,
+    this._charWidth,
+    this._charHeight,
+    web.HTMLCanvasElement canvas,
+    this._font,
+    this._scale,
+  ) : _context = canvas.context2D {
     _font.onLoad.listen((_) {
       _imageLoaded = true;
       render();
@@ -107,25 +142,31 @@ class RetroTerminal extends RenderableTerminal {
       var sy = (char ~/ 32) * _charHeight;
 
       // Fill the background.
-      _context.fillStyle = glyph.back.cssColor;
-      _context.fillRect(x * _charWidth * _scale, y * _charHeight * _scale,
-          _charWidth * _scale, _charHeight * _scale);
+      _context.fillStyle = glyph.back.cssColor.toJS;
+      _context.fillRect(
+        x * _charWidth * _scale,
+        y * _charHeight * _scale,
+        _charWidth * _scale,
+        _charHeight * _scale,
+      );
 
       // Don't bother drawing empty characters.
       if (char == 0 || char == CharCode.space) return;
 
       var color = _getColorFont(glyph.fore);
       _context.imageSmoothingEnabled = false;
-      _context.drawImageScaledFromSource(
-          color,
-          sx,
-          sy,
-          _charWidth,
-          _charHeight,
-          x * _charWidth * _scale,
-          y * _charHeight * _scale,
-          _charWidth * _scale,
-          _charHeight * _scale);
+
+      _context.drawImage(
+        color,
+        sx,
+        sy,
+        _charWidth,
+        _charHeight,
+        x * _charWidth * _scale,
+        y * _charHeight * _scale,
+        _charWidth * _scale,
+        _charHeight * _scale,
+      );
     });
   }
 
@@ -133,12 +174,14 @@ class RetroTerminal extends RenderableTerminal {
   Vec pixelToChar(Vec pixel) =>
       Vec(pixel.x ~/ _charWidth, pixel.y ~/ _charHeight);
 
-  html.CanvasElement _getColorFont(Color color) {
+  web.HTMLCanvasElement _getColorFont(Color color) {
     var cached = _fontColorCache[color];
     if (cached != null) return cached;
 
     // Create a font using the given color.
-    var tint = html.CanvasElement(width: _font.width, height: _font.height);
+    var tint = web.HTMLCanvasElement();
+    tint.width = _font.width;
+    tint.height = _font.height;
     var context = tint.context2D;
 
     // Draw the font.
@@ -146,8 +189,8 @@ class RetroTerminal extends RenderableTerminal {
 
     // Tint it by filling in the existing alpha with the color.
     context.globalCompositeOperation = 'source-atop';
-    context.fillStyle = color.cssColor;
-    context.fillRect(0, 0, _font.width!, _font.height!);
+    context.fillStyle = color.cssColor.toJS;
+    context.fillRect(0, 0, _font.width, _font.height);
 
     _fontColorCache[color] = tint;
     return tint;

@@ -1,7 +1,8 @@
 import 'dart:async';
-import 'dart:html' as html;
+import 'dart:js_interop';
 
 import 'package:piecemeal/piecemeal.dart';
+import 'package:web/web.dart' as web;
 
 import 'key_bindings.dart';
 import 'terminal.dart';
@@ -22,8 +23,10 @@ class UserInterface<T> {
   RenderableTerminal? _terminal;
   bool _dirty = true;
 
-  StreamSubscription<html.KeyboardEvent>? _keyDownSubscription;
-  StreamSubscription<html.KeyboardEvent>? _keyUpSubscription;
+  StreamSubscription<web.KeyboardEvent>? _keyDownSubscription;
+  StreamSubscription<web.KeyboardEvent>? _keyUpSubscription;
+
+  late final JSExportedDartFunction _tickJS = _tick.toJS;
 
   /// Whether or not the UI is listening for keyboard events.
   ///
@@ -34,8 +37,8 @@ class UserInterface<T> {
     if (value == handlingInput) return;
 
     if (value) {
-      _keyDownSubscription = html.document.body!.onKeyDown.listen(_keyDown);
-      _keyUpSubscription = html.document.body!.onKeyUp.listen(_keyUp);
+      _keyDownSubscription = web.document.body!.onKeyDown.listen(_keyDown);
+      _keyUpSubscription = web.document.body!.onKeyUp.listen(_keyUp);
     } else {
       _keyDownSubscription?.cancel();
       _keyDownSubscription = null;
@@ -75,14 +78,15 @@ class UserInterface<T> {
       // Reset the start time so that we refresh immediately.
       _lastRefreshTime = null;
 
-      html.window.requestAnimationFrame(_tick);
+      web.window.requestAnimationFrame(_tickJS);
     }
   }
 
   UserInterface([this._terminal]);
 
   void setTerminal(RenderableTerminal terminal) {
-    var resized = _terminal == null ||
+    var resized =
+        _terminal == null ||
         _terminal!.width != terminal.width ||
         _terminal!.height != terminal.height;
 
@@ -141,7 +145,7 @@ class UserInterface<T> {
     if (_dirty) _render();
   }
 
-  void _keyDown(html.KeyboardEvent event) {
+  void _keyDown(web.KeyboardEvent event) {
     var keyCode = event.keyCode;
 
     // If the keypress happened on the numpad, translate the keyCode.
@@ -166,8 +170,11 @@ class UserInterface<T> {
     // Firefox uses 59 for semicolon.
     if (keyCode == 59) keyCode = KeyCode.semicolon;
 
-    var input =
-        keyPress.find(keyCode, shift: event.shiftKey, alt: event.altKey);
+    var input = keyPress.find(
+      keyCode,
+      shift: event.shiftKey,
+      alt: event.altKey,
+    );
 
     var screen = _screens.last;
     if (input != null) {
@@ -181,7 +188,7 @@ class UserInterface<T> {
     }
   }
 
-  void _keyUp(html.KeyboardEvent event) {
+  void _keyUp(web.KeyboardEvent event) {
     var keyCode = event.keyCode;
 
     // Firefox uses 59 for semicolon.
@@ -207,7 +214,7 @@ class UserInterface<T> {
       _lastRefreshTime = time;
     }
 
-    if (_running) html.window.requestAnimationFrame(_tick);
+    if (_running) web.window.requestAnimationFrame(_tickJS);
   }
 
   void _render() {

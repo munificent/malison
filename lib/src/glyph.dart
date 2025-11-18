@@ -62,17 +62,19 @@ class Color {
   Color add(Color other, [double? fractionOther]) {
     fractionOther ??= 1.0;
     return Color(
-        (r + other.r * fractionOther).clamp(0, 255).toInt(),
-        (g + other.g * fractionOther).clamp(0, 255).toInt(),
-        (b + other.b * fractionOther).clamp(0, 255).toInt());
+      (r + other.r * fractionOther).clamp(0, 255).toInt(),
+      (g + other.g * fractionOther).clamp(0, 255).toInt(),
+      (b + other.b * fractionOther).clamp(0, 255).toInt(),
+    );
   }
 
   Color blend(Color other, double fractionOther) {
     var fractionThis = 1.0 - fractionOther;
     return Color(
-        (r * fractionThis + other.r * fractionOther).toInt(),
-        (g * fractionThis + other.g * fractionOther).toInt(),
-        (b * fractionThis + other.b * fractionOther).toInt());
+      (r * fractionThis + other.r * fractionOther).toInt(),
+      (g * fractionThis + other.g * fractionOther).toInt(),
+      (b * fractionThis + other.b * fractionOther).toInt(),
+    );
   }
 
   Color blendPercent(Color other, int percentOther) =>
@@ -89,13 +91,13 @@ class Glyph {
   final Color back;
 
   Glyph(String char, [Color? fore, Color? back])
-      : char = char.codeUnits[0],
-        fore = fore ?? Color.white,
-        back = back ?? Color.black;
+    : char = char.codeUnits[0],
+      fore = fore ?? Color.white,
+      back = back ?? Color.black;
 
   const Glyph.fromCharCode(this.char, [Color? fore, Color? back])
-      : fore = fore ?? Color.white,
-        back = back ?? Color.black;
+    : fore = fore ?? Color.white,
+      back = back ?? Color.black;
 
   factory Glyph.fromDynamic(Object charOrCharCode, [Color? fore, Color? back]) {
     if (charOrCharCode is String) return Glyph(charOrCharCode, fore, back);

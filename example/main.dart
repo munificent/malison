@@ -1,8 +1,8 @@
-import 'dart:html' as html;
 import 'dart:math' as math;
 
 import 'package:malison/malison.dart';
 import 'package:malison/malison_web.dart';
+import 'package:web/web.dart' as web;
 
 const width = 80;
 const height = 30;
@@ -13,12 +13,21 @@ final ui = UserInterface<String>();
 final terminals = <RenderableTerminal Function()>[
   () => RetroTerminal.dos(width, height),
   () => RetroTerminal.shortDos(width, height),
-  () => CanvasTerminal(width, height,
-      Font('Menlo, Consolas', size: 12, w: 8, h: 14, x: 1, y: 11)),
   () => CanvasTerminal(
-      width, height, Font('Courier', size: 13, w: 10, h: 15, x: 1, y: 11)),
+    width,
+    height,
+    Font('Menlo, Consolas', size: 12, w: 8, h: 14, x: 1, y: 11),
+  ),
   () => CanvasTerminal(
-      width, height, Font('Courier', size: 12, w: 8, h: 14, x: 1, y: 10))
+    width,
+    height,
+    Font('Courier', size: 13, w: 10, h: 15, x: 1, y: 11),
+  ),
+  () => CanvasTerminal(
+    width,
+    height,
+    Font('Courier', size: 12, w: 8, h: 14, x: 1, y: 10),
+  ),
 ];
 
 /// Index of the current terminal in [terminals].
@@ -42,7 +51,7 @@ void main() {
 }
 
 void updateTerminal() {
-  html.document.body!.children.clear();
+  web.document.body!.innerText = '';
   ui.setTerminal(terminals[terminalIndex]());
 }
 
@@ -58,20 +67,23 @@ class MainScreen extends Screen<String> {
       Color.green,
       Color.aqua,
       Color.blue,
-      Color.purple
+      Color.purple,
     ];
 
     var random = math.Random();
 
     for (var char in "0123456789".codeUnits) {
       for (var color in colors) {
-        balls.add(Ball(
+        balls.add(
+          Ball(
             color,
             char,
             random.nextDouble() * Ball.pitWidth,
             random.nextDouble() * (Ball.pitHeight / 2.0),
             random.nextDouble() + 0.2,
-            0.0));
+            0.0,
+          ),
+        );
       }
     }
   }
@@ -171,7 +183,7 @@ class MainScreen extends Screen<String> {
       "└┴┬├─┼╞╟╚╔╩╦╠═╬╧",
       "╨╤╥╙╘╒╓╫╪┘┌█▄▌▐▀",
       "αßΓπΣσµτΦΘΩδ∞φε∩",
-      "≡±≥≤⌠⌡÷≈°∙·√ⁿ²■"
+      "≡±≥≤⌠⌡÷≈°∙·√ⁿ²■",
     ];
 
     var y = 13;
